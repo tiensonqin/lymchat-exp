@@ -1,0 +1,30 @@
+* TODO Lymchat
+** DONE ex-navigation
+   CLOSED: [2016-10-14 Fri 23:22]
+*** initialRoute support string param ExNavigationStack
+    #+BEGIN_SRC js
+      if (typeof initialRoute == 'string') {
+          route = this.props.navigation.router.getRoute(initialRoute);
+          routes = [
+              route,
+          ];
+      } else {
+          routes = [
+              initialRoute,
+          ];
+      }
+    #+END_SRC
+
+** DONE tab bar icon
+   CLOSED: [2016-10-14 Fri 23:22]
+** DONE storage
+   CLOSED: [2016-10-14 Fri 23:22]
+** DONE photo upload
+   CLOSED: [2016-10-15 Sat 10:39]
+** DONE fonts
+   CLOSED: [2016-10-15 Sat 11:49]
+** TODO notifications
+** TODO hide tabbar
+** TODO webrtc
+** TODO ex-navigation -> cljs wrapper
+** TODO purescript wrapper

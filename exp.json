@@ -1,0 +1,21 @@
+{
+  "name": "lymchat",
+  "description": "Lymchat - Learn different cultures.",
+  "slug": "lymchat",
+  "sdkVersion": "UNVERSIONED",
+  "version": "1.0.1",
+  "orientation": "portrait",
+  "primaryColor": "#cccccc",
+  "iconUrl": "http://lymchat.com/images/lymchat.png",
+  "notification": {
+    "iconUrl": "http://lymchat.com/images/lymchat.png",
+    "color": "#000000"
+  },
+  "loading": {
+    "iconUrl": "http://lymchat.com/images/lymchat.png",
+    "hideExponentText": true
+  },
+  "packagerOpts": {
+    "assetExts": ["ttf","otf"]
+  }
+}
