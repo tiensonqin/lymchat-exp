@@ -122,8 +122,8 @@
 (defn auth
   [social-type user-info]
   (api-post (str (api-host) "/v1/auth") nil (assoc (social->user social-type user-info)
-                                                   :app-key (.-app_key ui/RCTConfig)
-                                                   :app-secret (.-app_secret ui/RCTConfig))
+                                                   :app-key (.-app_key config/RCTConfig)
+                                                   :app-secret (.-app_secret config/RCTConfig))
             (fn [res]
               (let [res (js->clj res :keywordize-keys true)]
                 (if (:new res)

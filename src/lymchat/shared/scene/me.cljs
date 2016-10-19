@@ -121,15 +121,18 @@
           "Don't vibrate"]
          [switch {:on-value-change #(do
                                       (reset! hidden-no-disturb? %)
+                                      (r/flush)
                                       (js/setTimeout (fn [] (dispatch [:set-no-disturb? %])) 50))
                   :on-tint-color "#65BC54"
-                  :value @hidden-no-disturb?}]]
+                  :value @hidden-no-disturb?
+                  }]]
 
         [view {:style (:setting-item styles)}
          [text {:style {:font-size 14}}
           "Don't invite me"]
          [switch {:on-value-change #(do
                                       (reset! hidden-no-invite? %)
+                                      (r/flush)
                                       (js/setTimeout (fn [] (dispatch [:set-no-dm %])) 50))
                   :on-tint-color "#65BC54"
                   :value @hidden-no-invite?}]]

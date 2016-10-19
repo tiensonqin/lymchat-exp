@@ -245,3 +245,12 @@
                              [component])})]
     (aset c "route" (clj->js route-opts))
     c))
+
+(defn jsx->clj
+  [x]
+  (if (map? x)
+    x
+    (into {} (for [k (.keys js/Object x)]
+               [(keyword k)
+                (let [v (aget x k)]
+                  v)]))))

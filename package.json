@@ -9,7 +9,7 @@
     "@exponent/ex-navigation": "^1.7.0-rc-4",
     "@exponent/vector-icons": "^1.0.1",
     "bluebird": "^3.4.6",
-    "exponent": "~10.0.0",
+    "exponent": "github:tiensonqin/exponent-sdk#webrtc",
     "react": "~15.3.1",
     "react-native": "github:exponentjs/react-native#sdk-10.1.0",
     "react-native-app-intro": "^1.1.5",

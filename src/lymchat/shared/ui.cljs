@@ -1,15 +1,11 @@
 (ns lymchat.shared.ui
   (:require [reagent.core :as r]
             [lymchat.shared.colors :as color]
-            [clojure.string :as str]
-            [lymchat.config :as config]))
+            [clojure.string :as str]))
 
 (enable-console-print!)
 
 (def react-native (js/require "react-native"))
-
-;; TODO how to make RCTConfig safe in exponent?
-(def RCTConfig config/RCTConfig)
 
 (def platform (.-Platform react-native))
 
@@ -171,6 +167,14 @@
 (def Permissions (aget exponent "Permissions"))
 (def Util (aget exponent "Util"))
 (def registerRootComponent (aget exponent "registerRootComponent"))
+;; Webrtc
+(def RTCPeerConnection (aget Components "RTCPeerConnection"))
+(def RTCIceCandidate (aget Components "RTCIceCandidate"))
+(def RTCSessionDescription (aget Components "RTCSessionDescription"))
+(def RTCView (aget Components "RTCView"))
+(def MediaStream (aget Components "MediaStream"))
+(def MediaStreamTrack (aget Components "MediaStreamTrack"))
+(def getUserMedia (aget Components "getUserMedia"))
 
 ;; ex-navigation
 (def ex-navigation (js/require "@exponent/ex-navigation"))
