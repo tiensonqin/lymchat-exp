@@ -23,8 +23,11 @@
    CLOSED: [2016-10-15 Sat 10:39]
 ** DONE fonts
    CLOSED: [2016-10-15 Sat 11:49]
+** DONE webrtc
+   CLOSED: [2016-10-20 Thu 17:08]
+** DONE ex-navigation -> cljs wrapper
+   CLOSED: [2016-10-20 Thu 17:08]
 ** TODO notifications
 ** TODO hide tabbar
-** TODO webrtc
-** TODO ex-navigation -> cljs wrapper
-** TODO purescript wrapper
+** TODO action sheet
+   maybe react-native-dialog
