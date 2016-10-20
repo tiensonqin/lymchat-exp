@@ -10,6 +10,7 @@
             [lymchat.shared.scene.member :as member]
             [lymchat.shared.scene.invite :as invite]
             [lymchat.shared.scene.language :refer [language-cp]]
+            [lymchat.shared.scene.call :as call]
             [lymchat.navigation.tab :as tab]))
 
 (def router (ui/create-router
@@ -27,6 +28,6 @@
                     :set-native-language language-cp
                     :show-avatar me/avatar-cp
                     :channel-members member/members-cp
-
                     :change-name profile/change-name-cp
-                    :invitations invite/invite-request-cp})))
+                    :invitations invite/invite-request-cp
+                    :video-call call/call-cp})))

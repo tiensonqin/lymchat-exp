@@ -61,7 +61,9 @@
          text-style {}}}
    title]
   [touchable-opacity {:on-press on-press
-                      :style style}
+                      :style (merge style
+                                    {:justify-content "center"
+                                     :align-items "center"})}
    [text {:style text-style}
     title]])
 (def ListView (.-ListView react-native))
@@ -139,10 +141,11 @@
 
 (defn actions
   [options handler]
-  (.showActionSheetWithOptions
-   action-sheet
-   (clj->js options)
-   handler))
+  (if (ios?)
+    (.showActionSheetWithOptions
+     action-sheet
+     (clj->js options)
+     handler)))
 
 ;; Exponentjs
 (def exponent (js/require "exponent"))
@@ -217,3 +220,10 @@
    [refresh-control
     {:refreshing value
      :onRefresh on-refresh-cb}]))
+
+(defn ring
+  []
+  (prn "Ring ..."))
+(defn stop-ring
+  []
+  (prn "Stop ring"))

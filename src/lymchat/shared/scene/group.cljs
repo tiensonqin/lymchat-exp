@@ -165,13 +165,10 @@
     (.addListener ui/Keyboard "keyboardWillShow" (fn [e] (keyboard-will-show-handler e visible-height)))
     (.addListener ui/Keyboard "keyboardWillHide" (fn [e] (keyboard-will-hide-handler e visible-height)))
     (fn []
-      [view {:style (if (ui/android?)
-                      {:flex 1
-                       :background-color "#efefef"}
-                      {:flex 1
-                       :background-color "rgba(255,255,255,0.8)"
-                       :height (- @visible-height 20)
-                       :top 20})}
+      [view {:style {:flex 1
+                     :background-color "rgba(255,255,255,0.8)"
+                     :height (- @visible-height 15)
+                     :top 15}}
        [view {:style {:flex-direction "row"
                       :margin-top -12}}
         [material-icon-button {:name "arrow-back"
@@ -270,7 +267,10 @@
 
 (defn search-button
   []
-  [touchable-opacity {:style {:background-color "transparent"}}
+  [touchable-opacity {:style {:flex 1
+                              :justify-content "center"
+                              :margin-right -6
+                              :align-items "center"}}
    [material-icon-button (merge
                           {:name "search"
                            :on-press (fn []

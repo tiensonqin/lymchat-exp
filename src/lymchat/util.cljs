@@ -240,6 +240,7 @@
                            (fn []
                              (let [this (r/current-component)
                                    nav (:navigator (r/props this))]
+                               ;; (prn (.getNavigator (:navigation (r/props this)) "root"))
                                (when nav
                                  (dispatch [:nav/set-nav nav])))
                              [component])})]

@@ -32,6 +32,120 @@
   [error]
   (t/error error))
 
+;; webrtc
+(def config {:iceServers [{:url "stun:stun.l.google.com:19302"}
+                          {:url "stun:global.stun.twilio.com:3478?transport=udp"}]})
+
+(def rtc-peer-connection ui/RTCPeerConnection)
+(def rtc-media-stream ui/MediaStream)
+(def rtc-ice-candidate ui/RTCIceCandidate)
+(def rtc-session-description ui/RTCSessionDescription)
+(def media-stream-track ui/MediaStreamTrack)
+(def get-user-media ui/getUserMedia)
+
+(def pc (atom nil))
+(defn handle-icecandidate
+  [to event]
+  (chsk-send! [:rtc/exchange {:to to
+                              :candidate (js/JSON.stringify (.-candidate event))}]))
+
+(defn get-local-stream
+  [front? cb]
+  (let [{:keys [width height]} (js->clj (.get ui/dimensions "window") :keywordize-keys true)]
+    (.getSources media-stream-track
+                 (fn [source-infos]
+                   (let [video-source-id (some->> source-infos
+                                                  (filter (fn [info]
+                                                            (and (= "video" (.-kind info))
+                                                                 (= (if front? "front" "back") (.-facing info)))))
+                                                  first
+                                                  (.-id))]
+                     (get-user-media
+                      (if (ui/ios?)
+                        (clj->js {"audio" true
+                                  "video" {"optional" [{"sourceId" video-source-id}]}})
+                        (clj->js {"audio" true
+                                  "video" {"optional" [{"sourceId" video-source-id}]
+                                           "mandatory" {:maxHeight height
+                                                        :maxWidth width}
+                                           "facingMode" "user"}}))
+
+                      (fn [stream]
+                        (cb stream))
+                      error-handler))))))
+
+(defn create-offer
+  [pc to]
+  (.createOffer pc (fn [desc]
+                     (.setLocalDescription pc desc
+                                           (fn []
+                                             (chsk-send! [:rtc/exchange {:to to
+                                                                         :sdp (js/JSON.stringify (.-localDescription pc))}]))
+                                           error-handler))
+                error-handler))
+
+(defn handle-negotiationneeded
+  [pc caller? to]
+  (when caller? (create-offer pc to)))
+
+;; (defn handle-iceconnectionstatechange
+;;   [event]
+;;   (prn "oniceconnectionstatechange" (-> event .-target .-iceConnectionState))
+;;   (let [state (-> event .-target .-iceConnectionState)]
+;;     (case state
+;;       "completed"
+;;       "connected")))
+
+(defn handle-addstream
+  [event]
+  (dispatch [:set-remote-stream (.-stream event)]))
+
+(defn handle-removestream
+  [event]
+  (prn "onremovestream" (.-stream event)))
+
+(defn new-pc-internal
+  [ice-servers caller? to local-stream]
+  (let [pc' (new rtc-peer-connection (clj->js ice-servers))]
+    (.addEventListener pc' "icecandidate" #(handle-icecandidate to %))
+    (.addEventListener pc' "negotiationneeded" #(handle-negotiationneeded pc' caller? to))
+    ;; (.addEventListener pc' "iceconnectionstatechange" #(handle-connection pc' id ))
+    (.addEventListener pc' "signalingstatechange" #(prn %))
+    (.addEventListener pc' "addstream" handle-addstream)
+    (.addEventListener pc' "removestream" handle-removestream)
+    (.addStream pc' local-stream)
+    (reset! pc pc')))
+
+(defn new-pc
+  [caller? to local-stream]
+  (chsk-send! [:rtc/ice-servers]
+              5000
+              (fn [reply]
+                (if (sente/cb-success? reply)
+                  (do
+                    (new-pc-internal reply caller? to local-stream))
+                  (do
+                    (t/error "can't get ice-servers")
+                    (new-pc-internal config caller? to local-stream))))))
+
+(defn initial!
+  [callee]
+  (get-local-stream true (fn [stream]
+                           (dispatch [:set-local-stream stream])
+                           (dispatch [:nav/push {:key :video-call
+                                                 :title "Video Call"
+                                                 :user callee}]))))
+
+(defn initial-accept!
+  [caller? callee]
+  (get-local-stream true (fn [stream]
+                           (dispatch [:set-local-stream stream])
+                           (dispatch [:nav/push {:key :video-call
+                                                 :title "Video Call"
+                                                 :user callee}])
+                           (new-pc caller? (:id callee) stream))))
+
+
 ;; chat
 (defn request-unread-messages
   [latest-message-id]
@@ -192,6 +306,27 @@
   ;; conj to current-message
   (dispatch [:new-invite data]))
 
+(defmethod push-msg-handler :chat/new-call
+  [[_ {:keys [from-id] :as data}]]
+  (->output! "Wsclient-1 new call from: %s" from-id)
+  (dispatch [:new-call from-id]))
+
+(defmethod push-msg-handler :chat/new-call-accept
+  [[_ {:keys [to-id] :as data}]]
+  (->output! "Wsclient-1 new call accept from: %s" to-id)
+  ;; log for analysis
+  (dispatch [:new-call-accept to-id]))
+
+(defmethod push-msg-handler :chat/reject-call
+  [[_ {:keys [from-id] :as data}]]
+  (->output! "Wsclient-1 recieved reject call from: %s" from-id)
+  (dispatch [:reject]))
+
+(defmethod push-msg-handler :chat/cancel-call
+  [[_ {:keys [from-id] :as data}]]
+  (->output! "Wsclient-1 recieved cancel call from: %s" from-id)
+  (dispatch [:cancel]))
+
 (defmethod push-msg-handler :chat/reply-unread-messages
   [[_ data]]
   (->output! "Wsclient-1 unread messages pushed from server: %s" data)
@@ -205,6 +340,43 @@
     (storage/set-latest-message-id latest-message-id))
 
   (dispatch [:reload-conversations]))
+
+(defn sdp-cand-handler
+  [pc {:keys [from candidate sdp] :as data}]
+
+  (if sdp
+    ;; sdp
+    (let [sdp (js/JSON.parse sdp)
+          remote-desc (new rtc-session-description sdp)]
+      (.setRemoteDescription
+       pc remote-desc
+       (fn []
+         (if (= "offer" (.-type sdp))
+           (do
+             (.createAnswer pc
+                            (fn [desc]
+                              (.setLocalDescription
+                               pc desc
+                               (fn []
+                                 (chsk-send! [:rtc/exchange {:to from
+                                                             :sdp (js/JSON.stringify (.-localDescription pc))}]))
+                               (fn [error]
+                                 (prn error))))
+                            (fn [error]
+                              (prn error))))
+           (prn "Successfully set remote description")))
+       (fn [error]
+         (prn "Can't set remote description: " error))))
+
+    ;; candidate
+    (when-not (= "null" candidate)
+      (.addIceCandidate pc (new rtc-ice-candidate (js/JSON.parse candidate))))))
+
+(defmethod push-msg-handler :rtc/exchange
+  [[_ {:keys [from candidate sdp] :as data}]]
+  (if @pc
+    (sdp-cand-handler @pc data)
+    (t/error "Pc not initialized!")))
 
 (defmulti -event-msg-handler :id)
 

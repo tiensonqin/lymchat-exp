@@ -18,7 +18,6 @@
              :loading? false
              :uploading? false
              :sync? false
-             :in-call? false
              :signing? false
 
              :no-disturb? false
@@ -42,4 +41,11 @@
              :header? true
              :guide-step nil
              :username-set? false
-             :search-members-result nil})
+             :search-members-result nil
+
+             ;; audio, video
+             :current-callee nil
+             :open-video-call-modal? false
+             :in-call? false
+             :local-stream nil
+             :remote-stream nil})

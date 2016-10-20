@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles pl-style]]
-            [lymchat.shared.ui :refer [text view touchable-highlight list-view react-native button icon image input touchable-opacity material-icon-button] :as ui]
+            [lymchat.shared.ui :refer [text view touchable-highlight list-view react-native button icon image input touchable-opacity material-icon-button dimensions] :as ui]
             [lymchat.photo :refer [offline-avatar-cp]]
             [lymchat.util :as util]))
 
@@ -43,14 +43,15 @@
   []
   (util/hide-statusbar)
   (let [contacts (subscribe [:contacts])
+        visible-height (r/atom (.-height (.get dimensions "window")))
         current-input (subscribe [:contact-search-input])
         ds (.-DataSource (.-ListView react-native))
         list-view-ds (new ds #js {:rowHasChanged #(not= %1 %2)})]
     [view (pl-style :contacts)
      [view {:style {:flex 1
-                    :background-color (if (ui/ios?)
-                                        "rgba(255,255,255,0.8)"
-                                        "#efefef")}}
+                    :background-color "rgba(255,255,255,0.8)"
+                    :height (- @visible-height 15)
+                    :top 15}}
       [view {:style {:flex-direction "row"
                      :margin-top -12}}
        [material-icon-button {:name "arrow-back"

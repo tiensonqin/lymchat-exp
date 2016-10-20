@@ -22,7 +22,7 @@
                       :ios {:flex 1
                             :margin-top 65}}
    :mentions {:android {:flex 1
-                        :background-color "#efefef"
+                        :background-color "rgba(255,255,255,0.8)"
                         :margin-top 80}
               :ios {:flex 1
                     :background-color "rgba(255,255,255,0.8)"
@@ -32,11 +32,10 @@
                         :margin-top 80}
               :ios {:flex 1
                     :margin-top 65}}
-   :channel-members-count {:android {:padding-top 35
-                                     :padding-right 10
+   :channel-members-count {:android {:margin-top 6
+                                     :padding-right 20
                                      :font-size 20
-                                     :color "#FFF"
-                                     :align-self "center"}
+                                     :color "#65BC54"}
                            :ios {:padding-top 12
                                  :padding-right 30
                                  :align-self "center"
@@ -46,8 +45,8 @@
                                  }}
    :search-icon {:android {:size 24
                            :background-color "transparent"
-                           :margin-top 8
-                           :margin-right -10
+                           ;; :margin-top 8
+                           ;; :margin-right -10
                            :color "#rgba(0,0,0,0.8)"}
                  :ios {:size 24
                        :background-color "transparent"
@@ -66,27 +65,26 @@
                              :color "#rgba(0,0,0,0.8)"}}
    :video-call-icon {:android {:size 24
                                :background-color "transparent"
-                               :margin-top 35
+                               :margin-top 5
                                :margin-right -5
-                               :color "#FFF"}
+                               :color "#rgba(0,0,0,0.8)"}
                      :ios {:size 24
                            :background-color "transparent"
                            :margin-top 5
                            :margin-right -8
                            :color "#rgba(0,0,0,0.8)"}}
 
-   :avatar-icon {:android {:margin-top 40
+   :avatar-icon {:android {:margin-top 10
                            :margin-right 8}
                  :ios {:margin-top 10
                        :margin-right 6}}
 
-   :right-menu {:android {:padding-top 35
-                          :padding-bottom 10
+   :right-menu {:android {:padding-top 10
                           :padding-right 10
                           :padding-left 20
                           :font-size 20
                           :font-weight "700"
-                          :color "#FFF"
+                          :color "rgba(0,0,0,0.8)"
                           :align-self "center"}
                 :ios {:font-size 20
                       :padding-top 6
