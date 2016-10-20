@@ -30,6 +30,11 @@
 ** DONE hide tabbar
    CLOSED: [2016-10-20 Thu 21:28]
 
-** TODO notifications
 ** TODO action sheet
-   maybe react-native-dialog
+   react-native-dialog
+** TODO message input box
+** TODO notifications
+** TODO google signin
+** TODO wechat signin
+** TODO votes for new groups
+** TODO audio

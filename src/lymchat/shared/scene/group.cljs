@@ -259,7 +259,7 @@
                                   (filter-joined channels-ids))]
                  [scroll-cp channels]))
 
-             [view {:style {:margin-bottom 10}}
+             [view {:style {:margin-bottom 20}}
               (let [channels (-> @other-channels
                                  (filter-joined channels-ids))]
                 (for [channel channels]
@@ -281,9 +281,11 @@
 
 (defn groups-cp
   []
-  (util/wrap-route original-groups-cp {:navigationBar {:title "Groups"
-                                                       :titleStyle {:color "#333"
-                                                                    :fontFamily "pacifico"}
-                                                       :translucent true
-                                                       :backgroundColor "rgba(255,255,255,0.5)"
-                                                       :renderRight (fn [] (r/as-element [search-button]))}}))
+  (util/wrap-route
+   original-groups-cp
+   {:navigationBar {:title "Groups"
+                    :titleStyle {:color "#333"
+                                 :fontFamily "pacifico"}
+                    :translucent true
+                    :backgroundColor "rgba(255,255,255,0.5)"
+                    :renderRight (fn [] (r/as-element [search-button]))}}))
