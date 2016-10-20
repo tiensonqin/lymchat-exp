@@ -14,10 +14,10 @@
   [user]
   (let [{:keys [id name username avatar]} (js->clj user :keywordize-keys true)]
     [touchable-opacity {:on-press (fn []
-                                    (dispatch [:nav/push {:key :profile
-                                                          :title ""
-                                                          :user user
-                                                          :channel? true}]))
+                                    (dispatch [:nav/root-push {:key :profile
+                                                               :title ""
+                                                               :user user
+                                                               :channel? true}]))
                         :style {:flex-direction "column"}}
      [view {:style {:flex-direction "row"
                     :padding-left 10

@@ -106,8 +106,8 @@
 
       (do
         (dispatch [:new-invite (:user data)])
-        (dispatch [:nav/push {:key :invitations
-                              :title "Friend request"}]))
+        (dispatch [:nav/root-push {:key :invitations
+                                   :title "Friend request"}]))
 
       (and
        (= "invite-request" (:type data))

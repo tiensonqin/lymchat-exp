@@ -15,8 +15,8 @@
                                      (util/show-header)
                                      (util/show-statusbar)
                                      (dispatch [:nav/pop])
-                                     (dispatch [:nav/push {:key :conversation
-                                                           :title name}])
+                                     (dispatch [:nav/root-push {:key :conversation
+                                                                :title name}])
                                      (dispatch [:load-conversation-messages id]))
                         :underlay-color "#eee"}
 

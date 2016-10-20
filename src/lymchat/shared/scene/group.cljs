@@ -274,8 +274,8 @@
    [material-icon-button (merge
                           {:name "search"
                            :on-press (fn []
-                                       (dispatch [:nav/push {:key :search-groups
-                                                             :title ""}])
+                                       (dispatch [:nav/root-push {:key :search-groups
+                                                                  :title ""}])
                                        (util/hide-statusbar))}
                           (pl-style :search-icon))]])
 

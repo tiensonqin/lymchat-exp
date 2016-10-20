@@ -645,8 +645,8 @@
          user-id (:user_id message)
          name (aget (storage/get-by-id :contacts user-id) "name")]
      (dispatch [:load-conversation-messages user-id])
-     (dispatch [:nav/push {:key :conversation
-                           :title name}])
+     (dispatch [:nav/root-push {:key :conversation
+                                :title name}])
      (dispatch [:mark-conversation-as-read (:conversation_id message)]))
    db))
 
@@ -904,8 +904,8 @@
      (dispatch [:mark-conversation-as-read cid]))
 
    (dispatch [:load-conversation-messages (:id user)])
-   (dispatch [:nav/push {:key :conversation
-                         :title (:name user)}])
+   (dispatch [:nav/root-push {:key :conversation
+                              :title (:name user)}])
    db))
 
 (register-handler
@@ -918,8 +918,8 @@
    (dispatch [:load-conversation-messages (:id user)])
    (dispatch [:nav/home])
    (util/show-header)
-   (dispatch [:nav/push {:key :conversation
-                         :title (:name user)}])
+   (dispatch [:nav/root-push {:key :conversation
+                              :title (:name user)}])
    db))
 
 (register-handler
@@ -934,8 +934,8 @@
    (let [channel-id (str (:id channel))]
      ;; if channel conversation not exists, create the conversation
      (storage/create-channel-conversation channel-id nil)
-     (dispatch [:nav/push {:key :channel-conversation
-                           :title (str "#" (util/underscore-channel-name (:name channel)))
+     (dispatch [:nav/root-push {:key :channel-conversation
+                                :title (str "#" (util/underscore-channel-name (:name channel)))
                            :channel channel}])
      (-> db
          (assoc :current-channel channel-id)
@@ -1103,7 +1103,8 @@
 (register-handler
  :nav/set-nav
  (fn [db [_ value]]
-   (assoc db :nav value)))
+   (merge db
+          value)))
 
 (register-handler
  :nav/push
@@ -1111,6 +1112,16 @@
             :as route}]]
    (when-let [nav (:nav db)]
      (.push nav
+            (name key)
+            (clj->js (dissoc route :key))))
+   db))
+
+(register-handler
+ :nav/root-push
+ (fn [db [_ {:keys [key]
+            :as route}]]
+   (when-let [root-nav (:root-nav db)]
+     (.push root-nav
             (name key)
             (clj->js (dissoc route :key))))
    db))

@@ -71,8 +71,8 @@
         [view {:style {:flex-direction "row"
                        :padding 10
                        :background-color "#ffffff"}}
-         [touchable-opacity {:on-press #(dispatch [:nav/push {:key :show-avatar
-                                                              :title "Change Avatar"}])}
+         [touchable-opacity {:on-press #(dispatch [:nav/root-push {:key :show-avatar
+                                                                   :title "Change Avatar"}])}
           [offline-avatar-cp
            (:id @me)
            (:avatar @me)
@@ -88,8 +88,8 @@
                           :flex-direction "column"
                           :justify-content "center"}}
             [touchable-opacity {:on-press (fn []
-                                            (dispatch [:nav/push {:key :change-name
-                                                                  :title "Change Name"}]))}
+                                            (dispatch [:nav/root-push {:key :change-name
+                                                                       :title "Change Name"}]))}
              (name-cp (:name @me))]
             [text {:style {:padding-left 10
                            :padding-top 5
@@ -101,8 +101,8 @@
                           :align-items "flex-end"}}
             [touchable-opacity {:style {:padding-top 10
                                         :padding-left 10}
-                                :on-press #(dispatch [:nav/push {:key :invitations
-                                                                 :title "Invitations"}])}
+                                :on-press #(dispatch [:nav/root-push {:key :invitations
+                                                                      :title "Invitations"}])}
              [view {:flex-direction "row"
                     :align-items "center"}
               [text {:style {:color "#65BC54"
@@ -139,8 +139,8 @@
 
         [seperator-cp 10]
 
-        [touchable-highlight {:on-press #(dispatch [:nav/push {:key :set-native-language
-                                                               :title "What's your native language?"}])}
+        [touchable-highlight {:on-press #(dispatch [:nav/root-push {:key :set-native-language
+                                                                    :title "What's your native language?"}])}
          [view {:style (:setting-item styles)}
           [text "Native language"]
           [text (:language @me)]]]

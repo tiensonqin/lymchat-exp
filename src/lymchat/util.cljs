@@ -234,19 +234,6 @@
       (aget "_router")
       (.getRoute k)))
 
-(defn wrap-route
-  [component route-opts]
-  (let [c (r/create-class {:reagent-render
-                           (fn []
-                             (let [this (r/current-component)
-                                   nav (:navigator (r/props this))]
-                               ;; (prn (.getNavigator (:navigation (r/props this)) "root"))
-                               (when nav
-                                 (dispatch [:nav/set-nav nav])))
-                             [component])})]
-    (aset c "route" (clj->js route-opts))
-    c))
-
 (defn jsx->clj
   [x]
   (if (map? x)
@@ -255,3 +242,18 @@
                [(keyword k)
                 (let [v (aget x k)]
                   v)]))))
+
+(defn wrap-route
+  [component route-opts]
+  (let [c (r/create-class {:reagent-render
+                           (fn []
+                             (let [this (r/current-component)
+                                   props (r/props this)
+                                   root-nav (.getNavigator (:navigation props) "root")
+                                   nav (:navigator props)]
+                               (when nav
+                                 (dispatch [:nav/set-nav {:root-nav root-nav
+                                                          :nav nav}])))
+                             [component])})]
+    (aset c "route" (clj->js route-opts))
+    c))

@@ -1,6 +1,7 @@
 (ns lymchat.db)
 
 (def app-db {:app-ready? false
+             :root-nav nil
              :nav nil
              :tab-bar-visible? true
              :current-user nil

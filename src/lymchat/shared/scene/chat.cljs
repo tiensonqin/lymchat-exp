@@ -37,8 +37,8 @@
                                             (dispatch [:jump-in-channel-conversation channel]))
                                           (do
                                             (dispatch [:load-conversation-messages to])
-                                            (dispatch [:nav/push {:key :conversation
-                                                                  :title name}])))
+                                            (dispatch [:nav/root-push {:key :conversation
+                                                                       :title name}])))
                                         (dispatch [:mark-conversation-as-read id]))
                             :underlay-color "rgba(0,0,0,0.2)"}
 
@@ -115,7 +115,7 @@
                  :align-items "center"}}
    [touchable-opacity {:on-press #(do
                                     (dispatch [:reset-contact-search-input nil])
-                                    (dispatch [:nav/push {:key :contacts}]))}
+                                    (dispatch [:nav/root-push {:key :contacts}]))}
     [text {:style (:plus-button styles)} "＋"]]])
 
 (defn original-chats
@@ -422,9 +422,9 @@
                                             (dispatch [:call-initial callee]))}
                                (pl-style :video-call-icon))]]
 
-       [touchable-opacity {:on-press #(dispatch [:nav/push {:key :profile
-                                                            :title (:name callee)
-                                                            :user callee}])}
+       [touchable-opacity {:on-press #(dispatch [:nav/root-push {:key :profile
+                                                                 :title (:name callee)
+                                                                 :user callee}])}
         [image {:source {:uri (:avatar callee)}
                 :style (merge
                         {:width 30
@@ -488,10 +488,10 @@
                       self?
                       (assoc :padding-left 10))}
        [touchable-opacity {:on-press (fn []
-                                       (dispatch [:nav/push {:key :profile
-                                                             :title (:name clj-user)
-                                                             :user clj-user
-                                                             :channel? true}]))}
+                                       (dispatch [:nav/root-push {:key :profile
+                                                                  :title (:name clj-user)
+                                                                  :user clj-user
+                                                                  :channel? true}]))}
 
         [image {:source {:uri (:_avatar user)}
                 :style {:width 40
@@ -506,10 +506,10 @@
                        :justify-content "space-between"}}
          [view {:style {:flex-direction "row"}}
           [touchable-opacity {:on-press (fn []
-                                          (dispatch [:nav/push {:key :profile
-                                                                :title ""
-                                                                :user clj-user
-                                                                :channel? true}]))}
+                                          (dispatch [:nav/root-push {:key :profile
+                                                                     :title ""
+                                                                     :user clj-user
+                                                                     :channel? true}]))}
            [text {:style {:font-weight "700"
                           :color "rgba(0,0,0,0.85)"}}
             (:_username user)]]
@@ -693,9 +693,9 @@
       [view {:flex-direction "row"
              :padding-right 12
              :align-items "center"}
-       [touchable-opacity {:on-press #(dispatch [:nav/push {:key :channel-members
-                                                            :title (str "#" (:name channel) " members")
-                                                            :channel channel}])}
+       [touchable-opacity {:on-press #(dispatch [:nav/root-push {:key :channel-members
+                                                                 :title (str "#" (:name channel) " members")
+                                                                 :channel channel}])}
         [text {:style (pl-style :channel-members-count)}
          @current-channel-members-count]]
 

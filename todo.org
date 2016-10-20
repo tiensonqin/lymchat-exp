@@ -1,4 +1,4 @@
-* TODO Lymchat
+* Lymchat todos
 ** DONE ex-navigation
    CLOSED: [2016-10-14 Fri 23:22]
 *** initialRoute support string param ExNavigationStack
@@ -27,7 +27,9 @@
    CLOSED: [2016-10-20 Thu 17:08]
 ** DONE ex-navigation -> cljs wrapper
    CLOSED: [2016-10-20 Thu 17:08]
+** DONE hide tabbar
+   CLOSED: [2016-10-20 Thu 21:28]
+
 ** TODO notifications
-** TODO hide tabbar
 ** TODO action sheet
    maybe react-native-dialog

@@ -132,17 +132,17 @@
   [callee]
   (get-local-stream true (fn [stream]
                            (dispatch [:set-local-stream stream])
-                           (dispatch [:nav/push {:key :video-call
-                                                 :title "Video Call"
-                                                 :user callee}]))))
+                           (dispatch [:nav/root-push {:key :video-call
+                                                      :title "Video Call"
+                                                      :user callee}]))))
 
 (defn initial-accept!
   [caller? callee]
   (get-local-stream true (fn [stream]
                            (dispatch [:set-local-stream stream])
-                           (dispatch [:nav/push {:key :video-call
-                                                 :title "Video Call"
-                                                 :user callee}])
+                           (dispatch [:nav/root-push {:key :video-call
+                                                      :title "Video Call"
+                                                      :user callee}])
                            (new-pc caller? (:id callee) stream))))
 
 
@@ -216,10 +216,10 @@
     (chsk-send! [:chat/get-user-by-username {:username username}] 5000
                 (fn [reply]
                   (when (sente/cb-success? reply)
-                    (dispatch [:nav/push {:key :profile
-                                          :title ""
-                                          :user (:user reply)
-                                          :channel? true}]))))))
+                    (dispatch [:nav/root-push {:key :profile
+                                               :title ""
+                                               :user (:user reply)
+                                               :channel? true}]))))))
 
 (defn sync
   "Sync contacts[new contact], posts [likes,comments], invites"
