@@ -3,6 +3,7 @@
 (def app-db {:app-ready? false
              :root-nav nil
              :nav nil
+             :action-sheet nil
              :tab-bar-visible? true
              :current-user nil
              :conversations []

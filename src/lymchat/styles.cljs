@@ -32,9 +32,10 @@
                         :margin-top 80}
               :ios {:flex 1
                     :margin-top 65}}
-   :channel-members-count {:android {:margin-top 6
+   :channel-members-count {:android {:font-size 20
                                      :padding-right 20
-                                     :font-size 20
+                                     :padding-left 20
+                                     :padding-top 15
                                      :color "#65BC54"}
                            :ios {:padding-top 12
                                  :padding-right 30
@@ -79,7 +80,7 @@
                  :ios {:margin-top 10
                        :margin-right 6}}
 
-   :right-menu {:android {:padding-top 10
+   :right-menu {:android {:padding-top 8
                           :padding-right 10
                           :padding-left 20
                           :font-size 20

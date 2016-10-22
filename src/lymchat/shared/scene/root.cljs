@@ -65,13 +65,13 @@
              (fn [net-state]
                (if (true? net-state)
                  (dispatch [:set-net-state true])
-                 (dispatch [:set-net-state false]))))
-            )
+                 (dispatch [:set-net-state false])))))
 
           :reagent-render
           (fn []
-            [view {:style {:flex 1}}
-             [ui/navigation-provider {:router router/router}
-              [ui/stack-navigation {:id "root"
-                                    :initialRoute "tabs"}]]
-             [status-bar-cp]])})))))
+            [ui/action-sheet {:ref (fn [c] (dispatch [:set-action-sheet c]))}
+             [view {:style {:flex 1}}
+              [ui/navigation-provider {:router router/router}
+               [ui/stack-navigation {:id "root"
+                                     :initialRoute "tabs"}]]
+              [status-bar-cp]]])})))))

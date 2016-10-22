@@ -29,6 +29,7 @@
                "@exponent/ex-navigation"
                "@exponent/vector-icons/MaterialIcons"
                "@exponent/vector-icons/FontAwesome"
+               "@exponent/react-native-action-sheet"
                "SwipeableListView"
                "SwipeableQuickActions"
                "SwipeableQuickActionButton"

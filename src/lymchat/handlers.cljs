@@ -888,6 +888,20 @@
    (assoc db :signing? value)))
 
 (register-handler
+ :set-action-sheet
+ (fn [db [_ component]]
+   (assoc db :action-sheet component)))
+
+(register-handler
+ :show-action-sheet
+ (fn [db [_ options handler]]
+   (.showActionSheetWithOptions
+    (:action-sheet db)
+    (clj->js options)
+    handler)
+   db))
+
+(register-handler
  :report
  (fn [db [_ report]]
    (api/report-create report)

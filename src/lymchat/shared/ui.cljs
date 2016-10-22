@@ -1,7 +1,8 @@
 (ns lymchat.shared.ui
   (:require [reagent.core :as r]
             [lymchat.shared.colors :as color]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [re-frame.core :refer [dispatch]]))
 
 (enable-console-print!)
 
@@ -122,8 +123,6 @@
 
 (def parsed-text (r/adapt-react-class (.-default (js/require "react-native-parsed-text"))))
 
-(def action-sheet (.-ActionSheetIOS react-native))
-
 ;; moment
 (def moment (js/require "moment"))
 
@@ -141,11 +140,7 @@
 
 (defn actions
   [options handler]
-  (if (ios?)
-    (.showActionSheetWithOptions
-     action-sheet
-     (clj->js options)
-     handler)))
+  (dispatch [:show-action-sheet (clj->js options) handler]))
 
 ;; Exponentjs
 (def exponent (js/require "exponent"))
@@ -190,6 +185,9 @@
 (def tab-navigation (r/adapt-react-class TabNavigation))
 (def TabNavigationItem (aget ex-navigation "TabNavigationItem"))
 (def tab-navigation-item (r/adapt-react-class TabNavigationItem))
+
+;; action-sheet
+(def action-sheet (r/adapt-react-class (.-default (js/require "@exponent/react-native-action-sheet"))))
 
 ;; vector-icons
 (def font-awesome (.-default (js/require "@exponent/vector-icons/FontAwesome")))
