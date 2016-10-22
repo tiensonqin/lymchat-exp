@@ -17,5 +17,11 @@
   },
   "packagerOpts": {
     "assetExts": ["ttf","otf"]
+  },
+  "ios": {
+    "bundleIdentifier": "com.lymchat.lymchat",
+  },
+  "android": {
+    "package": "com.lymchat.lymchat",
   }
 }

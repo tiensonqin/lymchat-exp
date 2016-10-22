@@ -39,7 +39,7 @@
                           0  (if in?
                                (dispatch [:leave-channel (:id channel)])
                                (do
-                                 (dispatch [:join-channel (clj->js (update channel :created_at tc/to-date))])
+                                 (dispatch [:join-channel (update channel :created_at tc/to-date)])
                                  (if join-success-cb (join-success-cb))))
                           ;; cancel
                           nil))]

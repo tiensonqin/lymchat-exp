@@ -48,7 +48,6 @@
 (def touchable-without-feedback (r/adapt-react-class (.-TouchableWithoutFeedback react-native)))
 (def touchable-native-feedback (r/adapt-react-class (.-TouchableNativeFeedback react-native)))
 (def input (r/adapt-react-class (.-TextInput react-native)))
-(def switch-ios (r/adapt-react-class (.-SwitchIOS react-native)))
 (def switch (r/adapt-react-class (.-Switch react-native)))
 (def vibration (.-Vibration react-native))
 

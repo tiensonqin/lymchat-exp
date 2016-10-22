@@ -114,7 +114,7 @@
 (defn get-channel-by-id
   [id]
   (->> (get-in @app-db [:current-user :channels])
-       (filter #(= id (get % :id)))
+       (filter #(= (str id) (str (get % :id))))
        (first)))
 
 (defn get-channel-members-count

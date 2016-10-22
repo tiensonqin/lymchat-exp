@@ -174,20 +174,21 @@
   ([me-id]
    (send-photo-cp me-id nil))
   ([me-id channel-id]
-   [touchable-opacity {:style {:background-color "transparent"}}
-    [view {:style {:flex 1
-                   :flex-direction "row"}}
-     [material-icon-button {:name "camera"
-                            :on-press (fn [] (photo/upload me-id :message channel-id))
-                            :size 20
-                            :background-color "transparent"
-                            :margin-right -10
-                            :padding-top 13
-                            :padding-left 12
-                            :padding-right 12
-                            :padding-bottom 12
-                            :color "rgba(0,0,0,0.85)"}]
-     [view {:style {:margin-left -8}}]]]))
+   [view {:style {:justify-content "flex-end"}}
+    [touchable-opacity {:style {:background-color "transparent"}}
+     [view {:style {:flex 1
+                    :flex-direction "row"}}
+      [material-icon-button {:name "camera"
+                             :on-press (fn [] (photo/upload me-id :message channel-id))
+                             :size 20
+                             :background-color "transparent"
+                             :margin-right -10
+                             :padding-top 13
+                             :padding-left 12
+                             :padding-right 12
+                             :padding-bottom 12
+                             :color "rgba(0,0,0,0.85)"}]
+      [view {:style {:margin-left -8}}]]]]))
 
 (defn photo-cp
   [id url photo-modal?]
@@ -623,6 +624,7 @@
                        :on-error-button-press (fn [msg]
                                                 (dispatch [:resend-channel-message channel-id msg]))
                        :placeholder "Type a message..."
+                       :textInputStyle {:backgroundColor "rgba(255,255,255,0.8)"}
                        :textInputProps {:keyboardType "twitter"
                                         :maxLength 1024
                                         :auto-correct false

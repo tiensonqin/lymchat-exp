@@ -119,42 +119,37 @@
         [view {:style (:setting-item styles)}
          [text {:style {:font-size 14}}
           "Don't vibrate"]
-         [switch {:on-value-change #(do
-                                      (reset! hidden-no-disturb? %)
-                                      (r/flush)
-                                      (js/setTimeout (fn [] (dispatch [:set-no-disturb? %])) 50))
-                  :on-tint-color "#65BC54"
-                  :value @hidden-no-disturb?
-                  }]]
+         [switch (cond->
+                   {:on-value-change #(do
+                                        (reset! hidden-no-disturb? %)
+                                        (r/flush)
+                                        (js/setTimeout (fn [] (dispatch [:set-no-disturb? %])) 50))
+                    :value @hidden-no-disturb?}
+                   (ui/ios?)
+                   (assoc :on-tint-color "#65BC54"))]]
 
         [view {:style (:setting-item styles)}
          [text {:style {:font-size 14}}
           "Don't invite me"]
-         [switch {:on-value-change #(do
-                                      (reset! hidden-no-invite? %)
-                                      (r/flush)
-                                      (js/setTimeout (fn [] (dispatch [:set-no-dm %])) 50))
-                  :on-tint-color "#65BC54"
-                  :value @hidden-no-invite?}]]
+         [switch (cond->
+                   {:on-value-change #(do
+                                       (reset! hidden-no-invite? %)
+                                       (r/flush)
+                                       (js/setTimeout (fn [] (dispatch [:set-no-dm %])) 50))
+                    :value @hidden-no-invite?}
+                   (ui/ios?)
+                   (assoc :on-tint-color "#65BC54"))]]
 
         [seperator-cp 10]
 
-        [touchable-highlight {:on-press #(dispatch [:nav/root-push {:key :set-native-language
-                                                                    :title "What's your native language?"}])}
+        [touchable-highlight
+         {:on-press #(dispatch [:nav/root-push {:key :set-native-language
+                                                :title "What's your native language?"}])}
          [view {:style (:setting-item styles)}
           [text "Native language"]
           [text (:language @me)]]]
 
         [seperator-cp 10]
-
-        [touchable-highlight
-         {:on-press #(open-url "itms://itunes.apple.com/app/id1134985541")}
-         [view (:setting-icon-item styles)
-          [material-icon {:name "star-border"
-                          :size 20
-                          :color "#65BC54"}]
-          [text {:style {:padding-left 20}}
-           "Write a review"]]]
 
         [touchable-highlight
          {:on-press #(dispatch [:jump-in-lym])}
@@ -175,6 +170,8 @@
                           :color "rgba(0,0,0,0.6)"}]
           [text {:style {:padding-left 20}}
            "Privacy"]]]
+
+        [seperator-cp 10]
 
         [view {:style (:setting-icon-item styles)}
          [material-icon {:name "code"

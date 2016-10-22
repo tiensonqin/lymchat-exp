@@ -61,7 +61,7 @@
                               :padding 10}
                       :underlay-color "#eee"
                       :on-press (fn []
-                                  (dispatch [:join-channel (clj->js channel)])
+                                  (dispatch [:join-channel channel])
                                   (dispatch [:set-guide-step :done]))}
    [view {:key id
           :style {:flex-direction "row"}}

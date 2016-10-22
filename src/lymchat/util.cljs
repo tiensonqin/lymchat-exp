@@ -243,20 +243,50 @@
                 (let [v (aget x k)]
                   v)]))))
 
+(defn set-nav
+  [this]
+  (let [props (r/props this)
+        root-nav (when-let [navigation (:navigation props)]
+                   (.getNavigator navigation "root"))
+        nav (:navigator props)]
+    (when nav
+      (dispatch [:nav/set-nav (cond->
+                                {:nav nav}
+                                root-nav
+                                (assoc :root-nav root-nav))]))))
+
 (defn wrap-route
   [component route-opts]
-  (let [c (r/create-class {:reagent-render
-                           (fn []
-                             (let [this (r/current-component)
-                                   props (r/props this)
-                                   root-nav (when-let [navigation (:navigation props)]
-                                              (.getNavigator navigation "root"))
-                                   nav (:navigator props)]
-                               (when nav
-                                 (dispatch [:nav/set-nav (cond->
-                                                           {:nav nav}
-                                                           root-nav
-                                                           (assoc :root-nav root-nav))])))
-                             [component])})]
+  (let [c (r/create-class {:component-will-mount set-nav
+                           :reagent-render (fn [] component)})]
     (aset c "route" (clj->js route-opts))
     c))
+
+(defn distinct-by
+  "Returns a lazy sequence of the elements of coll, removing any elements that
+  return duplicate values when passed to a function f."
+  ([f]
+   (fn [rf]
+     (let [seen (volatile! #{})]
+       (fn
+         ([] (rf))
+         ([result] (rf result))
+         ([result x]
+          (let [fx (f x)]
+            (if (contains? @seen fx)
+              result
+              (do (vswap! seen conj fx)
+                  (rf result x)))))))))
+  ([f coll]
+   (let [step (fn step [xs seen]
+                (lazy-seq
+                 ((fn [[x :as xs] seen]
+                    (when-let [s (seq xs)]
+                      (let [fx (f x)]
+                        (if (contains? seen fx)
+                          (recur (rest s) seen)
+                          (cons x (step (rest s) (conj seen fx)))))))
+                  xs seen)))]
+     (step coll #{}))))
+
+(def distinct-by-id (partial distinct-by :id))

@@ -8,10 +8,9 @@
   "dependencies": {
     "@exponent/ex-navigation": "^1.7.0-rc-4",
     "@exponent/vector-icons": "^1.0.1",
-    "bluebird": "^3.4.6",
     "exponent": "github:tiensonqin/exponent-sdk#webrtc",
-    "react": "~15.3.1",
-    "react-native": "github:exponentjs/react-native#sdk-10.1.0",
+    "react": "~15.3.2",
+    "react-native": "github:exponentjs/react-native#sdk-10.1.4",
     "react-native-app-intro": "^1.1.5",
     "react-native-aws3": "0.0.1",
     "react-native-gifted-spinner": "^0.1.0",

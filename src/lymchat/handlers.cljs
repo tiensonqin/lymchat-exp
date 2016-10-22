@@ -458,13 +458,12 @@
 
 (register-handler
  :join-channel
- (fn [db [_ row]]
-   (let [channel (js->clj row :keywordize-keys true)]
-     (api/channel-join (str (aget row "id"))
-                       #(do
-                          (dispatch [:add-channel channel])
-                          (dispatch [:jump-in-channel-conversation channel]))
-                       nil))
+ (fn [db [_ channel]]
+   (api/channel-join (str (:id channel))
+                     #(do
+                        (dispatch [:add-channel channel])
+                        (dispatch [:jump-in-channel-conversation channel]))
+                     nil)
    db))
 
 (register-handler
