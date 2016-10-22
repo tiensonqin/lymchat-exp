@@ -1,9 +1,9 @@
 (ns lymchat.subs
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [register-sub subscribe]]
-            [lymchat.shared.ui :refer [moment]]
             [lymchat.storage :as storage]
-            [lymchat.util :as util]))
+            [lymchat.util :as util]
+            [lymchat.shared.ui :as ui]))
 
 (register-sub
  :app-ready?
@@ -207,7 +207,7 @@
 (defn- format-date
   [message]
   (if (and message (:created_at message))
-    (let [created-at (new moment (:created_at message))
+    (let [created-at (new ui/moment (:created_at message))
           day (cond
                 (util/today? created-at)
                 "Today"

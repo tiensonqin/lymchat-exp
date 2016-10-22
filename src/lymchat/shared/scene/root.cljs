@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles]]
-            [lymchat.shared.ui :refer [text view image touchable-highlight card-stack icon-button colors status-bar gradient image-prefetch activity-indicator] :as ui]
+            [lymchat.shared.ui :refer [text view image touchable-highlight icon-button colors status-bar gradient image-prefetch activity-indicator] :as ui]
             [lymchat.ws :as ws]
             [lymchat.util :as util]
             [lymchat.assets :as assets]

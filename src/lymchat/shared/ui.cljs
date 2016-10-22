@@ -8,7 +8,9 @@
 
 (def react-native (js/require "react-native"))
 
-(def platform (.-Platform react-native))
+(def platform (aget react-native "Platform"))
+
+(def moment (js/require "moment"))
 
 (defn get-platform
   []
@@ -22,16 +24,15 @@
   []
   (= "android" (get-platform)))
 
-(def text (r/adapt-react-class (.-Text react-native)))
-(def view (r/adapt-react-class (.-View react-native)))
-(def scroll (r/adapt-react-class (.-ScrollView react-native)))
-(def Image (.-Image react-native))
+(def text (r/adapt-react-class (aget react-native "Text")))
+(def view (r/adapt-react-class (aget react-native "View")))
+(def scroll (r/adapt-react-class (aget react-native "ScrollView")))
+(def Image (aget react-native "Image"))
 (def image (r/adapt-react-class Image))
 (defn image-prefetch
   [url]
   (.prefetch Image url))
-(def interaction-manager (.-InteractionManager react-native))
-(def device-event-emitter (.-DeviceEventEmitter react-native))
+(def interaction-manager (aget react-native "InteractionManager"))
 
 (defn run-after-interactions
   [cb]
@@ -39,17 +40,17 @@
                          cb))
 
 ;; refresh-control
-(def refresh-control (r/adapt-react-class (.-RefreshControl react-native)))
-(def StatusBar (.-StatusBar react-native))
+(def refresh-control (r/adapt-react-class (aget react-native "RefreshControl")))
+(def StatusBar (aget react-native "StatusBar"))
 (def status-bar (r/adapt-react-class StatusBar))
 
-(def touchable-highlight (r/adapt-react-class (.-TouchableHighlight react-native)))
-(def touchable-opacity (r/adapt-react-class (.-TouchableOpacity react-native)))
-(def touchable-without-feedback (r/adapt-react-class (.-TouchableWithoutFeedback react-native)))
-(def touchable-native-feedback (r/adapt-react-class (.-TouchableNativeFeedback react-native)))
-(def input (r/adapt-react-class (.-TextInput react-native)))
-(def switch (r/adapt-react-class (.-Switch react-native)))
-(def vibration (.-Vibration react-native))
+(def touchable-highlight (r/adapt-react-class (aget react-native "TouchableHighlight")))
+(def touchable-opacity (r/adapt-react-class (aget react-native "TouchableOpacity")))
+(def touchable-without-feedback (r/adapt-react-class (aget react-native "TouchableWithoutFeedback")))
+(def touchable-native-feedback (r/adapt-react-class (aget react-native "TouchableNativeFeedback")))
+(def input (r/adapt-react-class (aget react-native "TextInput")))
+(def switch (r/adapt-react-class (aget react-native "Switch")))
+(def vibration (aget react-native "Vibration"))
 
 (defn vibrate
   []
@@ -66,105 +67,81 @@
                                      :align-items "center"})}
    [text {:style text-style}
     title]])
-(def ListView (.-ListView react-native))
-(def list-view (r/adapt-react-class (.-ListView react-native)))
+(def ListView (aget react-native "ListView"))
+(def list-view (r/adapt-react-class (aget react-native "ListView")))
 (def SwipeableListView (js/require "SwipeableListView"))
 (def swipeable-list-view (r/adapt-react-class SwipeableListView))
 
 ;; dismisskeyboard
-(def Keyboard (.-Keyboard react-native))
-(def dismiss-keyboard (js/require "dismissKeyboard"))
-(defn dismiss-keyboard-cp
-  [child]
-  (let [dismissed? (r/atom false)]
-    (fn []
-      (if dismissed?
-        child
+(def Keyboard (aget react-native "Keyboard"))
 
-        [touchable-opacity {:style {:flex 1
-                                    :activeOpacity 1
-                                    :background-color "transparent"}
-                            :on-press (fn []
-                                        (dismiss-keyboard)
-                                        (reset! dismissed? true))}
-         child]))))
-
-(def activity-indicator (r/adapt-react-class (.-ActivityIndicator react-native)))
-(def linking (.-Linking react-native))
-(def app-registry (.-AppRegistry react-native))
+(def activity-indicator (r/adapt-react-class (aget react-native "ActivityIndicator")))
+(def linking (aget react-native "Linking"))
+(def app-registry (aget react-native "AppRegistry"))
 
 (defn open-url [url]
   (.openURL linking url))
 
-(def dimensions (.-Dimensions react-native))
-(def modal (r/adapt-react-class (.-Modal react-native)))
+(def dimensions (aget react-native "Dimensions"))
+(def modal (r/adapt-react-class (aget react-native "Modal")))
 
 ;; net-info
-(def net-info (.-NetInfo react-native))
+(def net-info (aget react-native "NetInfo"))
 
 ;; clipboard
-(def clipboard (.-Clipboard react-native))
+(def clipboard (aget react-native "Clipboard"))
 
 ;; aws3
-(def aws3 (js/require "react-native-aws3"))
-(def rns3 (.-RNS3 aws3))
-
-;; navigationexperimental
-(def card-stack (r/adapt-react-class (.-CardStack (.-NavigationExperimental react-native))))
-(def navigation-header-comp (.-Header (.-NavigationExperimental react-native)))
-(def navigation-header (r/adapt-react-class navigation-header-comp))
-(def header-title (r/adapt-react-class (.-Title (.-Header (.-NavigationExperimental react-native)))))
+(def AWS3 (js/require "react-native-aws3"))
+(def RNS3 (aget AWS3 "RNS3"))
 
 ;; app intro
-(def app-intro (r/adapt-react-class (.-default (js/require "react-native-app-intro"))))
+(def AppIntro (js/require "react-native-app-intro"))
+(def app-intro (r/adapt-react-class (aget AppIntro "default")))
 
-(def gifted-chat (r/adapt-react-class (.-GiftedChat (js/require "react-native-gifted-chat"))))
+(def GiftedChat (aget (js/require "react-native-gifted-chat") "GiftedChat"))
+(def gifted-chat (r/adapt-react-class GiftedChat))
 
-(def parsed-text (r/adapt-react-class (.-default (js/require "react-native-parsed-text"))))
-
-;; moment
-(def moment (js/require "moment"))
+(def ParsedText (js/require "react-native-parsed-text"))
+(def parsed-text (r/adapt-react-class (aget ParsedText "default")))
 
 (def colors color/colors)
 
 (defn alert
   ([title]
-   (.alert (.-Alert react-native) title))
+   (.alert (aget react-native "Alert") title))
   ([title message buttons]
-   (.alert (.-Alert react-native) title message (clj->js buttons))))
+   (.alert (aget react-native "Alert") title message (clj->js buttons))))
 
 (defn prompt
   [title message cb-or-buttons]
   (if (ios?)
-    (.prompt (.-AlertIOS react-native) title message cb-or-buttons)))
+    (.prompt (aget react-native "AlertIOS") title message cb-or-buttons)))
 
 (defn actions
   [options handler]
   (dispatch [:show-action-sheet (clj->js options) handler]))
 
 ;; Exponentjs
-(def exponent (js/require "exponent"))
+(def Exponent (js/require "exponent"))
 ;; Exponentjs api
-(def Amplitude (aget exponent "Amplitude"))
-(def Asset (aget exponent "Asset"))
-(def Components (aget exponent "Components"))
+(def Amplitude (aget Exponent "Amplitude"))
+(def Asset (aget Exponent "Asset"))
+(def Components (aget Exponent "Components"))
 (def app-loading (r/adapt-react-class Components.AppLoading))
 (def blur-view (r/adapt-react-class Components.BlurView))
 (def gradient (r/adapt-react-class Components.LinearGradient))
-(def video (r/adapt-react-class Components.Video))
-(def Constants (aget exponent "Constants"))
-(def Contacts (aget exponent "Contacts"))
-(def Crypto (aget exponent "Crypto"))
-(def Fabric (aget exponent "Fabric"))
-(def Facebook (aget exponent "Facebook"))
-(def FileSystem (aget exponent "FileSystem"))
-(def Font (aget exponent "Font"))
-(def ImageCropper (aget exponent "ImageCropper"))
-(def ImagePicker (aget exponent "ImagePicker"))
-(def Notifications (aget exponent "Notifications"))
-(def Permissions (aget exponent "Permissions"))
-(def Util (aget exponent "Util"))
-(def registerRootComponent (aget exponent "registerRootComponent"))
+(def Constants (aget Exponent "Constants"))
+(def Contacts (aget Exponent "Contacts"))
+(def Crypto (aget Exponent "Crypto"))
+(def Fabric (aget Exponent "Fabric"))
+(def Facebook (aget Exponent "Facebook"))
+(def FileSystem (aget Exponent "FileSystem"))
+(def Font (aget Exponent "Font"))
+(def ImagePicker (aget Exponent "ImagePicker"))
+(def Notifications (aget Exponent "Notifications"))
+(def Permissions (aget Exponent "Permissions"))
+(def Util (aget Exponent "Util"))
 ;; Webrtc
 (def RTCPeerConnection (aget Components "RTCPeerConnection"))
 (def RTCIceCandidate (aget Components "RTCIceCandidate"))
@@ -175,28 +152,32 @@
 (def getUserMedia (aget Components "getUserMedia"))
 
 ;; ex-navigation
-(def ex-navigation (js/require "@exponent/ex-navigation"))
-(def create-router (aget ex-navigation "createRouter"))
-(def NavigationProvider (aget ex-navigation "NavigationProvider"))
+(def ExNavigation (js/require "@exponent/ex-navigation"))
+(def create-router (aget ExNavigation "createRouter"))
+(def NavigationProvider (aget ExNavigation "NavigationProvider"))
 (def navigation-provider (r/adapt-react-class NavigationProvider))
-(def StackNavigation (aget ex-navigation "StackNavigation"))
+(def StackNavigation (aget ExNavigation "StackNavigation"))
 (def stack-navigation (r/adapt-react-class StackNavigation))
-(def TabNavigation (aget ex-navigation "TabNavigation"))
+(def TabNavigation (aget ExNavigation "TabNavigation"))
 (def tab-navigation (r/adapt-react-class TabNavigation))
-(def TabNavigationItem (aget ex-navigation "TabNavigationItem"))
+(def TabNavigationItem (aget ExNavigation "TabNavigationItem"))
 (def tab-navigation-item (r/adapt-react-class TabNavigationItem))
 
 ;; action-sheet
-(def action-sheet (r/adapt-react-class (.-default (js/require "@exponent/react-native-action-sheet"))))
+(def ActionSheet (js/require "@exponent/react-native-action-sheet"))
+(def action-sheet (r/adapt-react-class (aget ActionSheet "default")))
 
 ;; vector-icons
-(def font-awesome (.-default (js/require "@exponent/vector-icons/FontAwesome")))
-(def icon (r/adapt-react-class font-awesome))
-(def icon-button (r/adapt-react-class (.-Button font-awesome)))
+(def FontAwesome (js/require "@exponent/vector-icons/FontAwesome"))
 
-(def material-icons (.-default (js/require "@exponent/vector-icons/MaterialIcons")))
-(def material-icon (r/adapt-react-class material-icons))
-(def material-icon-button (r/adapt-react-class (.-Button material-icons)))
+(def icon (r/adapt-react-class (aget FontAwesome "default")))
+(def FontAwesomeButton (aget FontAwesome "default" "Button"))
+(def icon-button (r/adapt-react-class FontAwesomeButton))
+
+(def MaterialIcons (js/require "@exponent/vector-icons/MaterialIcons"))
+(def material-icon (r/adapt-react-class (aget MaterialIcons "default")))
+(def MaterialIconButton (aget MaterialIcons "default" "Button"))
+(def material-icon-button (r/adapt-react-class MaterialIconButton))
 
 ;; helper
 
@@ -205,7 +186,7 @@
    (->ds {:rowHasChanged (partial not=)
           :sectionHeaderHasChanged (partial not=)}))
   ([options]
-   (let [ds (.-DataSource ListView)]
+   (let [ds (aget ListView "DataSource")]
      (new ds (clj->js options)))))
 
 (defn clone-ds

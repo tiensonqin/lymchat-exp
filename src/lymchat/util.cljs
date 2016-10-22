@@ -10,7 +10,6 @@
             [clojure.string :as str]
             [clojure.walk :as walk]
             [goog.string.StringBuffer]
-            [lymchat.shared.ui :refer [moment]]
             [cljs.core.async :refer [put! promise-chan]]))
 
 (defn wrap-created-at
@@ -200,13 +199,13 @@
 
 (defn today?
   [date]
-  (let [today (new moment)
+  (let [today (new ui/moment)
         day (.startOf today "day")]
     (.isSame date day "d")))
 
 (defn yesterday?
   [date]
-  (let [yesterday (-> (new moment)
+  (let [yesterday (-> (new ui/moment)
                       (.subtract 1 "days")
                       (.startOf "day"))
         day (.startOf yesterday "day")]
@@ -226,13 +225,6 @@
   [obj]
   (when obj
     (js->clj obj :keywordize-keys true)))
-
-(defn get-route
-  [db k]
-  (-> db
-      (get-in [:nav :navigation])
-      (aget "_router")
-      (.getRoute k)))
 
 (defn jsx->clj
   [x]

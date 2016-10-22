@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles pl-style]]
-            [lymchat.shared.ui :refer [text view touchable-highlight list-view react-native button icon image input touchable-opacity colors activity-indicator moment refresh-control] :as ui]
+            [lymchat.shared.ui :refer [text view touchable-highlight list-view react-native button icon image input touchable-opacity colors activity-indicator refresh-control] :as ui]
             [lymchat.shared.scene.chat :refer [channel-current-input]]
             [lymchat.shared.scene.chat :refer [parse-text]]
             [lymchat.storage :as storage]
@@ -41,7 +41,7 @@
           (str "#" (util/underscore-channel-name channel_name))]
          [text {:style {:color "grey"
                         :margin-left 10}}
-          (.format (new moment created_at) "h:mm A")]]]
+          (.format (new ui/moment created_at) "h:mm A")]]]
 
        [text {:style {:font-size 16
                       :color "rgba(0,0,0,0.8)"

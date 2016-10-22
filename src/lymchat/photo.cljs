@@ -1,5 +1,5 @@
 (ns lymchat.photo
-  (:require [lymchat.shared.ui :refer [rns3 alert image] :as ui]
+  (:require [lymchat.shared.ui :refer [RNS3 alert image] :as ui]
             [lymchat.config :as config]
             [lymchat.util :refer [uuid-v4 development?]]
             [re-frame.core :refer [dispatch]]
@@ -22,7 +22,7 @@
                                file-name)
                        :type "image/JPEG"})
         options (clj->js (:s3-options @config/xxxxx))]
-    (-> (.put rns3 file options)
+    (-> (.put RNS3 file options)
         (.then (fn [response]
                  (if-not (= 201 (aget response "status"))
                    (alert "Failed to upload photo.")

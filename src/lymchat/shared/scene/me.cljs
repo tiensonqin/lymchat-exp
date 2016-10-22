@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles pl-style]]
-            [lymchat.shared.ui :refer [text view touchable-highlight button colors gradient material-icon icon-button input alert image switch open-url  scroll touchable-opacity modal dimensions StatusBar activity-indicator] :as ui]
+            [lymchat.shared.ui :refer [text view touchable-highlight button colors gradient material-icon icon-button input alert image switch open-url  scroll touchable-opacity modal dimensions activity-indicator] :as ui]
             [lymchat.photo :refer [offline-avatar-cp] :as photo]
             [lymchat.util :as util]))
 

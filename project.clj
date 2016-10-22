@@ -14,7 +14,9 @@
                  [reagent "0.6.0-SNAPSHOT" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server]]
                  [re-frame "0.7.0"]
                  [prismatic/schema "1.0.4"]
-                 [com.andrewmcveigh/cljs-time "0.4.0"]]
+                 [com.andrewmcveigh/cljs-time "0.4.0"]
+
+                 [react-native-externs "0.0.2-SNAPSHOT"]]
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.4-7"]]
   :clean-targets ["target/" "main.js"]
@@ -26,14 +28,12 @@
   :js-modules ["react-native"
                "react"
                "exponent"
+               "moment"
                "@exponent/ex-navigation"
                "@exponent/vector-icons/MaterialIcons"
                "@exponent/vector-icons/FontAwesome"
                "@exponent/react-native-action-sheet"
                "SwipeableListView"
-               "SwipeableQuickActions"
-               "SwipeableQuickActionButton"
-               "moment"
                "react-native-parsed-text"
                "react-native-gifted-chat"
                "react-native-app-intro"
@@ -55,6 +55,8 @@
                                                          :main          "env.main"
                                                          :output-dir    "target"
                                                          :static-fns    true
+                                                         :externs       ["js/externs.js"]
+                                                         :parallel-build     true
                                                          :optimize-constants true
-                                                         :optimizations :simple
+                                                         :optimizations :advanced
                                                          :closure-defines {"goog.DEBUG" false}}}]}}})

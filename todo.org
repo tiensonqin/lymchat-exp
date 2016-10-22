@@ -30,8 +30,14 @@
 ** DONE hide tabbar
    CLOSED: [2016-10-20 Thu 21:28]
 
-** TODO action sheet
+** DONE action sheet
+   CLOSED: [2016-10-22 Sat 23:37]
    react-native-dialog
+
+** DONE google closure externs
+   CLOSED: [2016-10-22 Sat 23:43]
+
+** TODO use cljsjs.moment
 ** TODO message input box
 ** TODO notifications
 ** TODO google signin

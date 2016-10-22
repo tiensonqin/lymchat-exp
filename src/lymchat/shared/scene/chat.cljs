@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles pl-style]]
-            [lymchat.shared.ui :refer [text view touchable-highlight list-view button icon image moment touchable-opacity colors icon-button dimensions alert
+            [lymchat.shared.ui :refer [text view touchable-highlight list-view button icon image touchable-opacity colors icon-button dimensions alert
                                        SwipeableListView swipeable-list-view
                                        input modal gradient
                                        gifted-chat clipboard
@@ -74,7 +74,7 @@
                  name)]
           (if last_message_at
             [text {:style {:color "rgba(0,0,0,0.6)"}}
-             (.fromNow (new moment last_message_at))])]
+             (.fromNow (new ui/moment last_message_at))])]
 
          [text {:style {:color (if is_read
                                  "rgba(0,0,0,0.6)"
@@ -501,7 +501,7 @@
 
           [text {:style {:color "grey"
                          :margin-left 7}}
-           (.format (new moment (:createdAt message)) "h:mm A")]]
+           (.format (new ui/moment (:createdAt message)) "h:mm A")]]
 
 
          (when (= false (:is_delivered message))

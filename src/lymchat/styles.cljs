@@ -117,11 +117,6 @@
            :align-items "center"
            :background-color (:teal500 colors)}
 
-   :container {:flex 1
-               :margin-top (if (:header? @app-db)
-                             (.-HEIGHT ui/navigation-header-comp)
-                             20)}
-
    :search-row {:flex 1
                 :backgroundColor "#eeeeee"
                 :padding 10}
@@ -187,27 +182,6 @@
                  :left 0
                  :backgroundColor "transparent"
                  :padding 10}
-
-   ;; copy from react-native-material-kit
-   :card {:view-style {:flex 1
-                       :margin-top (.-HEIGHT ui/navigation-header-comp)
-                       :backgroundColor "rgba(0,0,0,0.3)"
-                       :borderRadius 2
-                       :borderColor "#ffffff"
-                       ;; :borderWidth 1
-                       :shadowColor "rgba(0, 0, 0, 0.12)"
-                       :shadowOpacity 0.8
-                       :shadowRadius 2
-                       :shadowOffset {:height 1 :width 2}}
-          :image-style {:flex 1
-                        :resizeMode "cover"}
-          :title-style {:fontSize 16
-                        :color (:dark-white colors)
-                        :fontWeight "bold"}
-          :menu-style {:position "absolute"
-                       :top 0
-                       :right 10
-                       :backgroundColor "transparent"}}
 
    :gradient {:position "absolute"
               :top 0

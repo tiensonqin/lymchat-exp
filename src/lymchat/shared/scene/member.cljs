@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles pl-style]]
-            [lymchat.shared.ui :refer [text view touchable-highlight list-view react-native button icon image input touchable-opacity colors activity-indicator moment refresh-control]]
+            [lymchat.shared.ui :refer [text view touchable-highlight list-view react-native button icon image input touchable-opacity colors activity-indicator]]
             [lymchat.photo :refer [offline-avatar-cp]]
             [lymchat.shared.scene.chat :refer [channel-current-input]]
             [clojure.string :as str]

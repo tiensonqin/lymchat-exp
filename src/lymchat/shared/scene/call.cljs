@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles]]
-            [lymchat.shared.ui :refer [text view image button colors StatusBar touchable-opacity dimensions material-icon] :as ui]
+            [lymchat.shared.ui :refer [text view image button colors touchable-opacity dimensions material-icon] :as ui]
             [lymchat.util :as util]))
 
 (def rtc-view (r/adapt-react-class ui/RTCView))
