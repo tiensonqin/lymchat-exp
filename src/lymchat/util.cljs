@@ -249,11 +249,14 @@
                            (fn []
                              (let [this (r/current-component)
                                    props (r/props this)
-                                   root-nav (.getNavigator (:navigation props) "root")
+                                   root-nav (when-let [navigation (:navigation props)]
+                                              (.getNavigator navigation "root"))
                                    nav (:navigator props)]
                                (when nav
-                                 (dispatch [:nav/set-nav {:root-nav root-nav
-                                                          :nav nav}])))
+                                 (dispatch [:nav/set-nav (cond->
+                                                           {:nav nav}
+                                                           root-nav
+                                                           (assoc :root-nav root-nav))])))
                              [component])})]
     (aset c "route" (clj->js route-opts))
     c))

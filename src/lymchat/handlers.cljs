@@ -1117,8 +1117,7 @@
 (register-handler
  :nav/set-nav
  (fn [db [_ value]]
-   (merge db
-          value)))
+   (merge db value)))
 
 (register-handler
  :nav/push

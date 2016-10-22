@@ -136,7 +136,8 @@
 
 (defn prompt
   [title message cb-or-buttons]
-  (.prompt (.-AlertIOS react-native) title message cb-or-buttons))
+  (if (ios?)
+    (.prompt (.-AlertIOS react-native) title message cb-or-buttons)))
 
 (defn actions
   [options handler]

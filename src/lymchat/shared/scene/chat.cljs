@@ -237,17 +237,9 @@
            buttons ["Delete"
                     "Report"
                     "Cancel"]
-           options (cond
-                     (ui/ios?)
-                     {:options buttons
-                      :destructiveButtonIndex 0
-                      :cancelButtonIndex 2}
-
-                     (ui/android?)
-                     buttons
-
-                     :else
-                     nil)
+           options {:options buttons
+                    :destructiveButtonIndex 0
+                    :cancelButtonIndex 2}
            handler (fn [i]
                      (case i
                        0 (if channel-id
@@ -341,17 +333,9 @@
                     "Delete"
                     "Report"
                     "Cancel"]
-           options (cond
-                     (ui/ios?)
-                     {:options buttons
-                      :destructiveButtonIndex 1
-                      :cancelButtonIndex 3}
-
-                     (ui/android?)
-                     buttons
-
-                     :else
-                     nil)
+           options {:options buttons
+                    :destructiveButtonIndex 1
+                    :cancelButtonIndex 3}
            handler (fn [i]
                      (case i
                        0 (.setString clipboard message-text)

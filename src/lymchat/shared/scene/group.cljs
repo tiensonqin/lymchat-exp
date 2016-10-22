@@ -30,19 +30,11 @@
                     "Cancel"]
                    [(str "Join " (:name channel))
                     "Cancel"])
-         options (cond
-                   (ui/ios?)
-                   (cond->
-                     {:options buttons
-                      :cancelButtonIndex 1}
-                     in?
-                     (assoc :destructiveButtonIndex 0))
-
-                   (ui/android?)
-                   buttons
-
-                   :else
-                   nil)
+         options (cond->
+                   {:options buttons
+                    :cancelButtonIndex 1}
+                   in?
+                   (assoc :destructiveButtonIndex 0))
          handler (fn [i] (case i
                           0  (if in?
                                (dispatch [:leave-channel (:id channel)])
@@ -167,14 +159,13 @@
     (fn []
       [view {:style {:flex 1
                      :background-color "rgba(255,255,255,0.8)"
-                     :height (- @visible-height 15)
-                     :top 15}}
+                     :height (- @visible-height 40)
+                     :top 40}}
        [view {:style {:flex-direction "row"
                       :margin-top -12}}
         [material-icon-button {:name "arrow-back"
                                :on-press (fn []
                                            (dispatch [:reset-channels-search-input ""])
-                                           (util/show-statusbar)
                                            (dispatch [:nav/pop]))
                                :size 40
                                :background-color "transparent"
@@ -275,8 +266,7 @@
                           {:name "search"
                            :on-press (fn []
                                        (dispatch [:nav/root-push {:key :search-groups
-                                                                  :title ""}])
-                                       (util/hide-statusbar))}
+                                                                  :title ""}]))}
                           (pl-style :search-icon))]])
 
 (defn groups-cp

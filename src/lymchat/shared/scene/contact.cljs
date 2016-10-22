@@ -12,8 +12,6 @@
     [touchable-opacity {:style {:flex 1
                                 :padding 10}
                         :on-press #(do
-                                     (util/show-header)
-                                     (util/show-statusbar)
                                      (dispatch [:nav/pop])
                                      (dispatch [:nav/root-push {:key :conversation
                                                                 :title name}])
@@ -41,7 +39,6 @@
 
 (defn original-contacts-cp
   []
-  (util/hide-statusbar)
   (let [contacts (subscribe [:contacts])
         visible-height (r/atom (.-height (.get dimensions "window")))
         current-input (subscribe [:contact-search-input])
@@ -50,8 +47,8 @@
     [view (pl-style :contacts)
      [view {:style {:flex 1
                     :background-color "rgba(255,255,255,0.8)"
-                    :height (- @visible-height 15)
-                    :top 15}}
+                    :height (- @visible-height 40)
+                    :top 40}}
       [view {:style {:flex-direction "row"
                      :margin-top -12}}
        [material-icon-button {:name "arrow-back"
