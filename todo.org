@@ -37,7 +37,9 @@
 ** DONE google closure externs
    CLOSED: [2016-10-22 Sat 23:43]
 ** TODO [#A] message input box
-** TODO [#A] notifications
+** DONE [#A] notifications
+   CLOSED: [2016-10-25 Tue 23:17]
+** TODO [#A] invites, async hell
 ** TODO members
 ** TODO @
 ** TODO use cljsjs.moment
