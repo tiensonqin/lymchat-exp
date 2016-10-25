@@ -157,7 +157,7 @@
    (api-patch (str (api-host) "/v1/me") (get-token) body
               (fn [res]
                 (storage/update :users (merge {:id (:id (storage/me))}
-                                            body))
+                                              body))
                 (if success-cb
                   (success-cb res)))
               (fn [data]
@@ -181,10 +181,6 @@
               (let [invites-count (storage/get-count :invites)]
                 (if reply
                   (do
-                    (try (storage/create :contacts user)
-                         (catch js/Error e
-                           nil))
-
                     (dispatch [:conj-message {:id (long (str (tc/to-long (t/now)) (rand-int 100)))
                                               :user_id (:id (storage/me))
                                               :to_id (:id user)
@@ -196,14 +192,15 @@
                       ;; do nothing
                       nil
                       (do
-                        (util/restore-header)
+                        (util/show-statusbar)
+                        (dispatch [:nav/pop])
                         (dispatch [:jump-in-conversation user]))))
 
                   (if (> invites-count 1)
                     ;; do nothing
                     nil
                     (do
-                      (util/show-header)
+                      (util/show-statusbar)
                       (dispatch [:nav/pop])))))
 
               (dispatch [:delete-invite (:id user)]))
@@ -216,8 +213,9 @@
   [user-id]
   (api-delete (str (api-host) "/v1/me/contacts/" user-id) (get-token)
               (fn [res]
+                (prn {:res res})
                 (dispatch [:nav/home])
-                (util/restore-header)
+                (util/show-statusbar)
                 (js/setTimeout
                  (fn []
                    (storage/delete :conversations (storage/get-conversation-id-by-to user-id))
@@ -283,14 +281,14 @@
     :as opts}]
   (let [uri (util/uri-query-params (str (api-host) "/v1/me/mentions") opts)]
     (api-get uri
-            (get-token)
-            (fn [res]
-              (let [res (js->clj res :keywordize-keys true)]
-                (when-not (empty? res)
-                  (dispatch [:conj-mentions (:mentions res)]))))
-            (fn [error]
-              ;; todo error handler
-              (prn error)))))
+             (get-token)
+             (fn [res]
+               (let [res (js->clj res :keywordize-keys true)]
+                 (when-not (empty? res)
+                   (dispatch [:conj-mentions (:mentions res)]))))
+             (fn [error]
+               ;; todo error handler
+               (prn error)))))
 
 (defn refresh-mentions
   [{:keys [after-id before-id limit]

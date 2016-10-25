@@ -18,6 +18,7 @@
    #js{:className "cljs-tab-item"
        :id id
        :badgeText badge
+       :badge {:backgroundColor "red"}
        :renderIcon (fn [selected?]
                      (r/as-element [icon-cp icon-name selected?]))}
    (r/as-element

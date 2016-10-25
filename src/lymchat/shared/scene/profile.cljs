@@ -3,7 +3,8 @@
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [lymchat.styles :refer [styles pl-style]]
             [lymchat.shared.ui :refer [text view image touchable-highlight touchable-opacity button icon icon-button material-icon-button colors gradient scroll alert input dimensions run-after-interactions prompt] :as ui]
-            [lymchat.util :as util]))
+            [lymchat.util :as util]
+            [lymchat.storage :as storage]))
 
 (defn seperator-cp
   []
@@ -19,20 +20,32 @@
       [view {:style {:flex-direction "row"
                      :justify-content "space-between"
                      :margin-bottom 15}}
-       [button {:style {:border-width 1.5
-                        :border-color "#rgba(0,0,0,0.3)"
-                        :border-radius 4
-                        :width 120
-                        :height 40
-                        :background-color "transparent"
-                        :justify-content "center"
-                        :align-items "center"}
-                :text-style {:font-size 20
-                             :font-weight "500"
-                             :color "#rgba(0,0,0,0.6)"}
-                :on-press #(do
-                             (dispatch [:pop-jump-in-conversation user]))}
-        "Message"]])))
+       (if (storage/friend? (:id user))
+         [button {:style {:border-width 1.5
+                          :border-color "#rgba(0,0,0,0.3)"
+                          :border-radius 4
+                          :width 120
+                          :height 40
+                          :background-color "transparent"
+                          :justify-content "center"
+                          :align-items "center"}
+                  :text-style {:font-size 20
+                               :font-weight "500"
+                               :color "#rgba(0,0,0,0.6)"}
+                  :on-press #(do
+                               (dispatch [:pop-jump-in-conversation user]))}
+          "Message"]
+         [button {:style {:border-width 1.5
+                          :border-color (if @invite? "#65BC54" "#rgba(0,0,0,0.3)")
+                          :border-radius 4
+                          :width 120
+                          :height 40
+                          :background-color "transparent"}
+                  :text-style {:font-size 20
+                               :font-weight "500"
+                               :color (if @invite? "#65BC54" "#rgba(0,0,0,0.6)")}
+                  :on-press #(dispatch [:send-invite (:id user) invite?])}
+          (if @invite? "Sent" "Invite")])])))
 
 (defn original-profile-cp
   ([user]
@@ -41,57 +54,57 @@
    (r/create-class
     {:reagent-render
      (fn []
-      (if user
-       (let [current-user (subscribe [:current-user])
-             self? (= (str (:id @current-user)) (str (:id user)))]
-         (let [{:keys [id name username avatar language timezone]} user
-               {:keys [width height]} (js->clj (.get dimensions "window") :keywordize-keys true)]
-           [view {:style (pl-style :header-container)}
-            [image {:style {:width width
-                            :height 250
-                            :resizeMode "cover"}
-                    :source {:uri (util/get-avatar avatar :large)}}]
-            [view {:style {:position "absolute"
-                           :left 10
-                           :top 215
-                           :background-color "transparent"}}
-             [text {:style {:font-size 16
-                            :font-weight "bold"
-                            :color "#FFFFFF"
-                            }}
-              (str "@" username)]]
+       (if user
+         (let [current-user (subscribe [:current-user])
+               self? (= (str (:id @current-user)) (str (:id user)))]
+           (let [{:keys [id name username avatar language timezone]} user
+                 {:keys [width height]} (js->clj (.get dimensions "window") :keywordize-keys true)]
+             [view {:style (pl-style :header-container)}
+              [image {:style {:width width
+                              :height 250
+                              :resizeMode "cover"}
+                      :source {:uri (util/get-avatar avatar :large)}}]
+              [view {:style {:position "absolute"
+                             :left 10
+                             :top 215
+                             :background-color "transparent"}}
+               [text {:style {:font-size 16
+                              :font-weight "bold"
+                              :color "#FFFFFF"
+                              }}
+                (str "@" username)]]
 
-            [view {:style {:background-color "#FFF"
-                           :flex 1
-                           :padding-top 15
-                           :padding-left 15
-                           :padding-right 15}}
-             (if (and channel? (not self?))
-               [buttons-cp user])
+              [view {:style {:background-color "#FFF"
+                             :flex 1
+                             :padding-top 15
+                             :padding-left 15
+                             :padding-right 15}}
+               (if (and channel? (not self?))
+                 [buttons-cp user])
 
-             [text {:style {:color "grey"}}
-              "Native language"]
-             [text {:style {:margin-top 5
-                            :font-size 16}}
-              language]
+               [text {:style {:color "grey"}}
+                "Native language"]
+               [text {:style {:margin-top 5
+                              :font-size 16}}
+                language]
 
-             [seperator-cp]
+               [seperator-cp]
 
-             (when timezone
-               [view
-                [text {:style {:color "grey"}}
-                 "Timezone"]
-                [text {:style {:margin-top 5
-                               :font-size 16}}
-                 timezone]
+               (when timezone
+                 [view
+                  [text {:style {:color "grey"}}
+                   "Timezone"]
+                  [text {:style {:margin-top 5
+                                 :font-size 16}}
+                   timezone]
 
-                [seperator-cp]])]]))
-       [view {:style (merge
-                      (pl-style :header-container)
-                      {:justify-content "center"
-                       :align-items "center"})}
-        [text {:style {:font-size 20}}
-         "Username not exists."]]))})))
+                  [seperator-cp]])]]))
+         [view {:style (merge
+                        (pl-style :header-container)
+                        {:justify-content "center"
+                         :align-items "center"})}
+          [text {:style {:font-size 20}}
+           "Username not exists."]]))})))
 
 (defn show-profile-action-sheet
   [user channel?]

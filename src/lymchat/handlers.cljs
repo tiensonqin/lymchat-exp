@@ -128,8 +128,7 @@
  :restore-search
  (fn [db _]
    (-> db
-       (assoc :contact-search-input nil
-              ))))
+       (assoc :contact-search-input nil))))
 
 (register-handler
  :set-scroll-to-top?
@@ -141,7 +140,16 @@
  (fn [db [_ user-id]]
    (api/contact-delete user-id)
    (-> db
-       (update :conversations (fn [col] (filter #(not= user-id (:to %)) col))))))
+       (update :conversations (fn [col] (filter #(not= user-id (:to %)) col)))
+       (update :contacts (fn [col] (filter #(not= user-id (:id %)) col))))))
+
+(register-handler
+ :add-contact
+ (fn [db [_ user]]
+   (storage/create :contacts user)
+
+   (-> db
+       (update :contacts (fn [col] (conj col user))))))
 
 (register-handler
  :delete-conversation
@@ -195,7 +203,7 @@
         (catch js/Error e
           (prn e)))
    (when (= (count (:invites db)) 1)
-     (util/restore-header)
+     (util/show-statusbar)
      (dispatch [:nav/pop]))
    (update db :invites (fn [col] (filter #(not= id (:id %)) col)))))
 
@@ -1029,9 +1037,8 @@
  (fn [db [_ message k]]
    (if (= :invite-accept (get-in message [:data :type]))
      ;; create contact
-     (try (storage/create :contacts (get-in message [:data :user]))
-          (catch js/Error e
-            nil)))
+     (when-let [user (get-in message [:data :user])]
+       (dispatch [:add-contact user])))
 
    (let [message (assoc message :is_delivered true)
          message (if (:conversation_id message)

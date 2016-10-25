@@ -178,7 +178,13 @@
                          :size 20
                          :color "rgba(0,0,0,0.6)"}]
          [text {:style {:padding-left 20}}
-          "v1.0.2"]]]])))
+          "v1.0.2"]]
+
+        (when (util/development?)
+          [touchable-highlight
+           {:on-press #(lymchat.core-async-storage/clear)}
+           [text
+            "Clear"]])]])))
 
 (defn me-cp
   []

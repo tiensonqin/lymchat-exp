@@ -18,15 +18,10 @@
         first-invite (subscribe [:first-invite])
         self? (= (str (:id @current-user)) (str (:id @first-invite)))
         first-invite (if self? nil first-invite)]
-    (when (ui/ios?) (util/remove-header))
+    (util/hide-statusbar)
     (fn []
       (if (empty? @first-invite)
-        [view {:style {:flex 1
-                       :background-color "#efefef"
-                       :justify-content "center"
-                       :align-items "center"}}
-         [text {:style {:font-size 20}}
-          "No invitations."]]
+        [view]
         (let [{:keys [id name username avatar language timezone]} @first-invite
               {:keys [width height]} (js->clj (.get dimensions "window") :keywordize-keys true)]
           [view {:style {:flex 1}}
@@ -39,7 +34,7 @@
             [material-icon-button {:name "arrow-back"
                                    :on-press (fn []
                                                (dispatch [:nav/pop])
-                                               (when (ui/ios?) (util/restore-header)))
+                                               (util/show-statusbar))
                                    :size 30
                                    :background-color "transparent"
                                    :color "#FFF"}]]
@@ -112,8 +107,4 @@
   [props]
   (let [{:keys [title]} (util/keywordize props)]
     (util/wrap-route original-invite-request-cp
-                     {:navigationBar {:title title
-                                      :titleStyle {:color "#333"
-                                                   :fontFamily "pacifico"}
-                                      :translucent true
-                                      :backgroundColor "rgba(255,255,255,0.5)"}})))
+                     {:navigationBar {:visible false}})))

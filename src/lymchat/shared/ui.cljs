@@ -53,10 +53,11 @@
 (def vibration (aget react-native "Vibration"))
 (def device-event-emitter (aget react-native "DeviceEventEmitter"))
 
-
+;; TODO android vibrate permission
 (defn vibrate
   []
-  (.vibrate vibration))
+  (when (ios?)
+    (.vibrate vibration)))
 
 (defn button
   [{:keys [style text-style on-press]
