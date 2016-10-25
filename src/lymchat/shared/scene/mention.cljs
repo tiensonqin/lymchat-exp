@@ -116,7 +116,7 @@
          [view {:style {:flex 1
                         :justify-content "center"
                         :align-items "center"}}
-          [text {:style {:font-size 30
+          [text {:style {:font-size 20
                          :font-family "indie-flower"}}
            "No mentions yet."]]]))))
 

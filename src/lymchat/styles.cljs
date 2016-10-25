@@ -14,7 +14,8 @@
                            :font-size 18}
                  :ios {:color "rgba(0,0,0,0.8)"
                        :font-size 18}}
-   :contacts {:android {:flex 1}
+   :contacts {:android {:flex 1
+                        :margin-top 27}
               :ios {:flex 1
                     :margin-top 20}}
    :header-container {:android {:flex 1
@@ -52,7 +53,7 @@
                  :ios {:size 24
                        :background-color "transparent"
                        :margin-top 2
-                       :margin-right -10
+                       :margin-right -2
                        :color "#rgba(0,0,0,0.8)"}}
    :photo-upload-icon {:android {:size 24
                                  :background-color "transparent"
@@ -170,7 +171,7 @@
 
    :gist {:font-size 26
           :font-family "pacifico"
-          :font-weight "bold"
+          :font-weight "400"
           :color "#FFFFFF"
           :background-color "transparent"}
 

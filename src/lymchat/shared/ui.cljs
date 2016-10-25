@@ -143,13 +143,13 @@
 (def Permissions (aget Exponent "Permissions"))
 (def Util (aget Exponent "Util"))
 ;; Webrtc
-(def RTCPeerConnection (aget Components "RTCPeerConnection"))
-(def RTCIceCandidate (aget Components "RTCIceCandidate"))
-(def RTCSessionDescription (aget Components "RTCSessionDescription"))
-(def RTCView (aget Components "RTCView"))
-(def MediaStream (aget Components "MediaStream"))
-(def MediaStreamTrack (aget Components "MediaStreamTrack"))
-(def getUserMedia (aget Components "getUserMedia"))
+;; (def RTCPeerConnection (aget Components "RTCPeerConnection"))
+;; (def RTCIceCandidate (aget Components "RTCIceCandidate"))
+;; (def RTCSessionDescription (aget Components "RTCSessionDescription"))
+;; (def RTCView (aget Components "RTCView"))
+;; (def MediaStream (aget Components "MediaStream"))
+;; (def MediaStreamTrack (aget Components "MediaStreamTrack"))
+;; (def getUserMedia (aget Components "getUserMedia"))
 
 ;; ex-navigation
 (def ExNavigation (js/require "@exponent/ex-navigation"))

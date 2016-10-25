@@ -2,7 +2,7 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles]]
-            [lymchat.shared.ui :refer [text view image touchable-highlight colors status-bar gradient activity-indicator app-intro dimensions modal button]]
+            [lymchat.shared.ui :refer [text view image touchable-highlight colors status-bar gradient activity-indicator app-intro dimensions modal button] :as ui]
             [lymchat.shared.scene.login :as login]
             [lymchat.util :as util]))
 
@@ -31,26 +31,29 @@
   [width height]
   [{:title "Learn different cultures"
     :img image-s1
-    :imgStyle {:width width
+    :imgStyle {:width (if (ui/android?) 347 width)
                :resizeMode "contain"}
     :backgroundColor (:teal500 colors)
     :fontColor "#fff"
-    :level 10}
+    :level 10
+    }
    {:title "Talk to people with same interests"
     :img image-s2
-    :imgStyle {:width width
+    :imgStyle {:width (if (ui/android?) 347 width)
                :resizeMode "contain"}
     :backgroundColor (:teal500 colors)
     :fontColor "#fff"
-    :level 10}
-   {:title "Unlimited video chat"
-    :description "Start learning, completely free!"
-    :img image-s3
-    :imgStyle {:width width
-               :resizeMode "contain"}
-    :backgroundColor (:teal500 colors)
-    :fontColor "#fff"
-    :level 10}])
+    :level 10
+    }
+   ;; {:title "Unlimited video chat"
+   ;;  :description "Start learning, completely free!"
+   ;;  :img image-s3
+   ;;  :imgStyle {:width width
+   ;;             :resizeMode "contain"}
+   ;;  :backgroundColor (:teal500 colors)
+   ;;  :fontColor "#fff"
+   ;;  :level 10}
+   ])
 
 (defn intro-cp
   []
@@ -60,7 +63,7 @@
                         :background-color "transparent"
                         :font-size 20
                         :font-family "indie-flower"
-                        :font-weight "500"
+                        :font-weight "400"
                         :padding-top 10
                         :padding-bottom 10}]
         (case @skip-or-done?
@@ -80,10 +83,10 @@
                                                      }}}])
 
           :done
-
           [modal {:animationType "slide"
                   :transparent false
-                  :visible true}
+                  :visible true
+                  :onRequestClose (fn [])}
            [view {:flex 1
                   :padding-top 30
                   :background-color (:teal600 colors)

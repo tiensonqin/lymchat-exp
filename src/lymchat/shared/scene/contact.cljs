@@ -47,8 +47,8 @@
     [view (pl-style :contacts)
      [view {:style {:flex 1
                     :background-color "rgba(255,255,255,0.8)"
-                    :height (- @visible-height 40)
-                    :top 40}}
+                    :height (- @visible-height 10)
+                    :top 10}}
       [view {:style {:flex-direction "row"
                      :margin-top -12}}
        [material-icon-button {:name "arrow-back"
@@ -65,17 +65,24 @@
                :clear-button-mode "always"
                :on-change-text (fn [value] (dispatch [:reset-contact-search-input value]))
                :placeholder "Direct Message"}]]
-     [list-view {:keyboardShouldPersistTaps true
-                 :enableEmptySections true
-                 :style {:padding-left 5}
-                 :automaticallyAdjustContentInsets false
-                 :dataSource (.cloneWithRows list-view-ds (clj->js (filter-contacts @current-input @contacts)))
-                 :renderRow (fn [row] (r/as-element (row-cp row)))
-                 :renderSeparator (fn [section-id row-id]
-                                    (r/as-element
-                                     [view {:key (str section-id "-" row-id)
-                                            :style {:height 1
-                                                    :background-color "#ddd"}}]))}]]]))
+      (if-not (seq @contacts)
+        [view {:style {:flex 1
+                       :top 80
+                       :align-items "center"}}
+         [text {:style {:font-size 20
+                        :font-family "indie-flower"}}
+          "No contacts yet."]]
+        [list-view {:keyboardShouldPersistTaps true
+                    :enableEmptySections true
+                    :style {:padding-left 5}
+                    :automaticallyAdjustContentInsets false
+                    :dataSource (.cloneWithRows list-view-ds (clj->js (filter-contacts @current-input @contacts)))
+                    :renderRow (fn [row] (r/as-element (row-cp row)))
+                    :renderSeparator (fn [section-id row-id]
+                                       (r/as-element
+                                        [view {:key (str section-id "-" row-id)
+                                               :style {:height 1
+                                                       :background-color "#ddd"}}]))}])]]))
 
 (defn contacts-cp
   [props]

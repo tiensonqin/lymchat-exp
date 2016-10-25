@@ -33,7 +33,7 @@
 
     (fn []
       (cond
-        (not @app-ready?)
+        (false? @app-ready?)
         [ui/app-loading]
 
         (nil? @current-user)
@@ -57,7 +57,11 @@
 
         :else
         (r/create-class
-         {:component-did-mount
+         {:component-will-mount
+          (fn [this]
+            (util/show-statusbar))
+
+          :component-did-mount
           (fn [this]
             (ws/start!)
 

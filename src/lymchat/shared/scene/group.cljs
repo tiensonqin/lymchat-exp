@@ -153,14 +153,15 @@
         visible-height (r/atom (.-height (.get dimensions "window")))
         channels (subscribe [:channels-search-result])
         ds (.-DataSource (.-ListView react-native))
+        top (if (ui/ios?) 30 37)
         list-view-ds (new ds #js {:rowHasChanged #(not= %1 %2)})]
     (.addListener ui/Keyboard "keyboardWillShow" (fn [e] (keyboard-will-show-handler e visible-height)))
     (.addListener ui/Keyboard "keyboardWillHide" (fn [e] (keyboard-will-hide-handler e visible-height)))
     (fn []
       [view {:style {:flex 1
                      :background-color "rgba(255,255,255,0.8)"
-                     :height (- @visible-height 40)
-                     :top 40}}
+                     :height (- @visible-height top)
+                     :top top}}
        [view {:style {:flex-direction "row"
                       :margin-top -12}}
         [material-icon-button {:name "arrow-back"

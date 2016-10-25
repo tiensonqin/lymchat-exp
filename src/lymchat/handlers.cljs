@@ -4,7 +4,7 @@
    [re-frame.core :refer [register-handler after dispatch]]
    [lymchat.db :refer [app-db]]
    [lymchat.shared.login :as login]
-   [lymchat.ws :refer [pc] :as ws]
+   [lymchat.ws :as ws]
    [lymchat.storage :as storage]
    [lymchat.api :as api]
    [cljs-time.core :as t]
@@ -199,195 +199,195 @@
      (dispatch [:nav/pop]))
    (update db :invites (fn [col] (filter #(not= id (:id %)) col)))))
 
-(register-handler
- :call-initial
- (fn [db [_ callee]]
-   ;; play sound
-   (when-not (:in-call? db)
-     (ui/ring))
+;; (register-handler
+;;  :call-initial
+;;  (fn [db [_ callee]]
+;;    ;; play sound
+;;    (when-not (:in-call? db)
+;;      (ui/ring))
 
-   ;; send call notification
-   (ws/chsk-send! [:chat/new-call {:from-name (get-in db [:current-user :name])
-                                   :to-id (:id callee)}])
-   (ws/initial! callee)
-   db))
+;;    ;; send call notification
+;;    (ws/chsk-send! [:chat/new-call {:from-name (get-in db [:current-user :name])
+;;                                    :to-id (:id callee)}])
+;;    (ws/initial! callee)
+;;    db))
 
-(register-handler
- :new-call-accept
- (fn [db [_ to-id]]
-   (ui/stop-ring)
-   (ws/new-pc true to-id (:local-stream db))
-   db))
+;; (register-handler
+;;  :new-call-accept
+;;  (fn [db [_ to-id]]
+;;    (ui/stop-ring)
+;;    (ws/new-pc true to-id (:local-stream db))
+;;    db))
 
-(register-handler
- :new-call
- (fn [db [_ from-id]]
-   (if (:in-call? db)
-     ;; todo create message, "Calls you", send busy status to callee,
-     nil
+;; (register-handler
+;;  :new-call
+;;  (fn [db [_ from-id]]
+;;    (if (:in-call? db)
+;;      ;; todo create message, "Calls you", send busy status to callee,
+;;      nil
 
-     (when-let [from (storage/get-by-id :contacts from-id)]
-       (ui/ring)
+;;      (when-let [from (storage/get-by-id :contacts from-id)]
+;;        (ui/ring)
 
-       ;; TODO except current-callee equals to current conversation
-       (dispatch [:jump-in-conversation from])
+;;        ;; TODO except current-callee equals to current conversation
+;;        (dispatch [:jump-in-conversation from])
 
-       (dispatch [:set-open-video-call-modal? true])))
+;;        (dispatch [:set-open-video-call-modal? true])))
 
-   db))
+;;    db))
 
-(register-handler
- :set-open-video-call-modal?
- (fn [db [_ value]]
-   (assoc db :open-video-call-modal? value)))
+;; (register-handler
+;;  :set-open-video-call-modal?
+;;  (fn [db [_ value]]
+;;    (assoc db :open-video-call-modal? value)))
 
-(register-handler
- :accept-call
- (fn [db [_ from]]
-   (ui/stop-ring)
-   (ws/initial-accept! false from)
-   (js/setTimeout (fn []
-                    (ws/chsk-send! [:chat/new-call-accept {:from-id (:id from)}])) 2000)
+;; (register-handler
+;;  :accept-call
+;;  (fn [db [_ from]]
+;;    (ui/stop-ring)
+;;    (ws/initial-accept! false from)
+;;    (js/setTimeout (fn []
+;;                     (ws/chsk-send! [:chat/new-call-accept {:from-id (:id from)}])) 2000)
 
-   (assoc db :in-call? true)))
+;;    (assoc db :in-call? true)))
 
-(register-handler
- :reject-call
- (fn [db [_ from]]
-   (ui/stop-ring)
-   (ws/chsk-send! [:chat/reject-call {:to-id from}])
-   (when @pc
-     (try
-       (do
-         ;; remove local stream
-         (when-let [local-stream (:local-stream db)]
-           (.removeStream @pc local-stream)
-           (.release local-stream))
+;; (register-handler
+;;  :reject-call
+;;  (fn [db [_ from]]
+;;    (ui/stop-ring)
+;;    (ws/chsk-send! [:chat/reject-call {:to-id from}])
+;;    (when @pc
+;;      (try
+;;        (do
+;;          ;; remove local stream
+;;          (when-let [local-stream (:local-stream db)]
+;;            (.removeStream @pc local-stream)
+;;            (.release local-stream))
 
-         ;; ;; remove remote stream
-         (when-let [remote-stream (:remote-stream db)]
-           (.removeStream @pc remote-stream)
-           (.release remote-stream))
+;;          ;; ;; remove remote stream
+;;          (when-let [remote-stream (:remote-stream db)]
+;;            (.removeStream @pc remote-stream)
+;;            (.release remote-stream))
 
-         ;; close pc
-         (.close @pc))
+;;          ;; close pc
+;;          (.close @pc))
 
-       (catch js/Error e
-         (prn e))))
-   (assoc db
-          :in-call? false
-          :local-stream nil
-          :remote-stream nil)))
+;;        (catch js/Error e
+;;          (prn e))))
+;;    (assoc db
+;;           :in-call? false
+;;           :local-stream nil
+;;           :remote-stream nil)))
 
-(register-handler
- :set-local-stream
- (fn [db [_ value]]
-   (assoc db :local-stream value)))
+;; (register-handler
+;;  :set-local-stream
+;;  (fn [db [_ value]]
+;;    (assoc db :local-stream value)))
 
-(register-handler
- :set-remote-stream
- (fn [db [_ value]]
-   ;; (js/setTimeout ui/force-speaker-on 1000)
-   (assoc db
-          :remote-stream value
-          :in-call? true)))
+;; (register-handler
+;;  :set-remote-stream
+;;  (fn [db [_ value]]
+;;    ;; (js/setTimeout ui/force-speaker-on 1000)
+;;    (assoc db
+;;           :remote-stream value
+;;           :in-call? true)))
 
-(register-handler
- :hangup
- (fn [db [_]]
-   (when (:in-call? db)
-     (ws/chsk-send! [:chat/cancel-call {:to-id (:current-callee db)}]))
-   (ui/stop-ring)
+;; (register-handler
+;;  :hangup
+;;  (fn [db [_]]
+;;    (when (:in-call? db)
+;;      (ws/chsk-send! [:chat/cancel-call {:to-id (:current-callee db)}]))
+;;    (ui/stop-ring)
 
-   (dispatch [:nav/pop])
+;;    (dispatch [:nav/pop])
 
-   (util/restore-header)
-   (when @pc
-     (try
-       (do
-         ;; remove local stream
-         (when-let [local-stream (:local-stream db)]
-           (.removeStream @pc local-stream)
-           (.release local-stream))
+;;    (util/restore-header)
+;;    (when @pc
+;;      (try
+;;        (do
+;;          ;; remove local stream
+;;          (when-let [local-stream (:local-stream db)]
+;;            (.removeStream @pc local-stream)
+;;            (.release local-stream))
 
-         ;; remove remote stream
-         (when-let [remote-stream (:remote-stream db)]
-           (.removeStream @pc remote-stream)
-           (.release remote-stream))
+;;          ;; remove remote stream
+;;          (when-let [remote-stream (:remote-stream db)]
+;;            (.removeStream @pc remote-stream)
+;;            (.release remote-stream))
 
-         ;; close pc
-         (.close @pc))
+;;          ;; close pc
+;;          (.close @pc))
 
-       (catch js/Error e
-         (prn e))))
+;;        (catch js/Error e
+;;          (prn e))))
 
-   (assoc db
-          :in-call? false
-          :local-stream nil
-          :remote-stream nil)))
+;;    (assoc db
+;;           :in-call? false
+;;           :local-stream nil
+;;           :remote-stream nil)))
 
-(register-handler
- :cancel
- (fn [db [_]]
-   (dispatch [:nav/pop])
+;; (register-handler
+;;  :cancel
+;;  (fn [db [_]]
+;;    (dispatch [:nav/pop])
 
-   (util/restore-header)
+;;    (util/restore-header)
 
-   (when @pc
-     (try
-       (do
-         ;; remove local stream
-         (when-let [local-stream (:local-stream db)]
-           (.removeStream @pc local-stream)
-           (.release local-stream))
+;;    (when @pc
+;;      (try
+;;        (do
+;;          ;; remove local stream
+;;          (when-let [local-stream (:local-stream db)]
+;;            (.removeStream @pc local-stream)
+;;            (.release local-stream))
 
-         ;; ;; remove remote stream
-         (when-let [remote-stream (:remote-stream db)]
-           (.removeStream @pc remote-stream)
-           (.release remote-stream))
+;;          ;; ;; remove remote stream
+;;          (when-let [remote-stream (:remote-stream db)]
+;;            (.removeStream @pc remote-stream)
+;;            (.release remote-stream))
 
-         ;; close pc
-         (.close @pc))
+;;          ;; close pc
+;;          (.close @pc))
 
-       (catch js/Error e
-         (prn e))))
+;;        (catch js/Error e
+;;          (prn e))))
 
-   (assoc db
-          :in-call? false
-          :local-stream nil
-          :remote-stream nil)))
+;;    (assoc db
+;;           :in-call? false
+;;           :local-stream nil
+;;           :remote-stream nil)))
 
-(register-handler
- :reject
- (fn [db [_]]
-   (ui/stop-ring)
-   (dispatch [:nav/pop])
+;; (register-handler
+;;  :reject
+;;  (fn [db [_]]
+;;    (ui/stop-ring)
+;;    (dispatch [:nav/pop])
 
-   (util/restore-header)
+;;    (util/restore-header)
 
-   (when @pc
-     (try
-       (do
-         ;; remove local stream
-         (when-let [local-stream (:local-stream db)]
-           (.removeStream @pc local-stream)
-           (.release local-stream))
+;;    (when @pc
+;;      (try
+;;        (do
+;;          ;; remove local stream
+;;          (when-let [local-stream (:local-stream db)]
+;;            (.removeStream @pc local-stream)
+;;            (.release local-stream))
 
-         ;; ;; remove remote stream
-         (when-let [remote-stream (:remote-stream db)]
-           (.removeStream @pc remote-stream)
-           (.release remote-stream))
+;;          ;; ;; remove remote stream
+;;          (when-let [remote-stream (:remote-stream db)]
+;;            (.removeStream @pc remote-stream)
+;;            (.release remote-stream))
 
-         ;; close pc
-         (.close @pc))
+;;          ;; close pc
+;;          (.close @pc))
 
-       (catch js/Error e
-         (prn e))))
+;;        (catch js/Error e
+;;          (prn e))))
 
-   (assoc db
-          :in-call? false
-          :local-stream nil
-          :remote-stream nil)))
+;;    (assoc db
+;;           :in-call? false
+;;           :local-stream nil
+;;           :remote-stream nil)))
 
 (register-handler
  :set-current-user
@@ -909,9 +909,6 @@
 (register-handler
  :jump-in-conversation
  (fn [db [_ user]]
-   (prn {:jump-in-conversation user
-         :cid (storage/get-conversation-id-by-to
-               (:id user))})
    (when-let [cid (storage/get-conversation-id-by-to
                    (:id user))]
      (dispatch [:mark-conversation-as-read cid]))

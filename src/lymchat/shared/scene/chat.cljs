@@ -110,7 +110,7 @@
 (defn new-chat-button
   []
   [view {:style {:flex 1
-                 :padding-right 12
+                 :padding-right (if (ui/ios?) 8 12)
                  :justify-content "center"
                  :align-items "center"}}
    [touchable-opacity {:on-press #(do
@@ -283,45 +283,45 @@
                          :resizeMode "cover"
                          :border-radius 4}}]]]))))
 
-(defn modal-cp
-  []
-  (let [current-callee (subscribe [:current-callee])]
-    (fn []
-      [view {:style {:flex 1}}
-       [modal {:isOpen true
-               :swipeToClose false
-               :backdropPressToClose false}
-        [gradient {:style (:gradient styles)
-                   :colors #js ["#134E5E" "#71B280"]}]
+;; (defn modal-cp
+;;   []
+;;   (let [current-callee (subscribe [:current-callee])]
+;;     (fn []
+;;       [view {:style {:flex 1}}
+;;        [modal {:isOpen true
+;;                :swipeToClose false
+;;                :backdropPressToClose false}
+;;         [gradient {:style (:gradient styles)
+;;                    :colors #js ["#134E5E" "#71B280"]}]
 
-        [view {:style {:flex 1
-                       :justify-content "center"}}
-         [view {:flex-direction "row"
-                :padding 30
-                :justify-content "space-between"}
-          [button {:style {:border-width 0
-                           :border-radius 10
-                           :padding 20
-                           :height 50
-                           :background-color "#65BC54"}
-                   :text-style {:color "#ffffff"
-                                :font-size 20}
-                   :on-press #(let [from (storage/get-by-id :contacts @current-callee)]
-                                (dispatch [:set-open-video-call-modal? false])
-                                (dispatch [:accept-call from]))}
-           "Accept"]
+;;         [view {:style {:flex 1
+;;                        :justify-content "center"}}
+;;          [view {:flex-direction "row"
+;;                 :padding 30
+;;                 :justify-content "space-between"}
+;;           [button {:style {:border-width 0
+;;                            :border-radius 10
+;;                            :padding 20
+;;                            :height 50
+;;                            :background-color "#65BC54"}
+;;                    :text-style {:color "#ffffff"
+;;                                 :font-size 20}
+;;                    :on-press #(let [from (storage/get-by-id :contacts @current-callee)]
+;;                                 (dispatch [:set-open-video-call-modal? false])
+;;                                 (dispatch [:accept-call from]))}
+;;            "Accept"]
 
-          [button {:style {:border-width 0
-                           :border-radius 10
-                           :padding 20
-                           :height 50
-                           :background-color "#EA384D"}
-                   :text-style {:color "#ffffff"
-                                :font-size 20}
-                   :on-press #(do
-                                (dispatch [:set-open-video-call-modal? false])
-                                (dispatch [:reject-call @current-callee]))}
-           "Reject"]]]]])))
+;;           [button {:style {:border-width 0
+;;                            :border-radius 10
+;;                            :padding 20
+;;                            :height 50
+;;                            :background-color "#EA384D"}
+;;                    :text-style {:color "#ffffff"
+;;                                 :font-size 20}
+;;                    :on-press #(do
+;;                                 (dispatch [:set-open-video-call-modal? false])
+;;                                 (dispatch [:reject-call @current-callee]))}
+;;            "Reject"]]]]])))
 
 (defn show-actions
   ([props]
@@ -360,34 +360,31 @@
 (defn original-conversation-cp
   []
   (let [messages (subscribe [:current-messages])
-        current-user (subscribe [:current-user])
-        modal? (subscribe [:open-video-call-modal?])]
+        current-user (subscribe [:current-user])]
     (fn []
       (when (> (count @messages) 0))
-      (if @modal?
-        [modal-cp]
-        [gifted-chat {:messages (clj->js (take 100 (reverse (distinct (sort-by :createdAt @messages)))))
-                      :containerStyles (assoc (pl-style :header-container)
-                                              :background-color "#d0d3d4")
-                      :on-send (fn [message]
-                                 (dispatch [:send-message (aget message 0)]))
-                      :user (clj->js {:_id (:id @current-user)})
-                      :onEndReached (fn []
-                                      (dispatch [:load-earlier-messages (atom false)]))
-                      :renderActions (fn [props]
-                                       (r/as-element
-                                        (send-photo-cp (:id @current-user))))
-                      :renderMessageImage (fn [props]
-                                            (r/as-element [message-photo-cp props]))
-                      :onMessageLongPress (fn [props]
-                                            (show-actions props))
+      [gifted-chat {:messages (clj->js (take 100 (reverse (distinct (sort-by :createdAt @messages)))))
+                    :containerStyles (assoc (pl-style :header-container)
+                                            :background-color "#d0d3d4")
+                    :on-send (fn [message]
+                               (dispatch [:send-message (aget message 0)]))
+                    :user (clj->js {:_id (:id @current-user)})
+                    :onEndReached (fn []
+                                    (dispatch [:load-earlier-messages (atom false)]))
+                    :renderActions (fn [props]
+                                     (r/as-element
+                                      (send-photo-cp (:id @current-user))))
+                    :renderMessageImage (fn [props]
+                                          (r/as-element [message-photo-cp props]))
+                    :onMessageLongPress (fn [props]
+                                          (show-actions props))
 
-                      :placeholder "Type a message..."
+                    :placeholder "Type a message..."
 
-                      :renderCustomView (fn [props]
-                                          (r/as-element [triangle-cp props]))
-                      :on-error-button-press (fn [msg]
-                                               (dispatch [:resend-message msg]))}]))))
+                    :renderCustomView (fn [props]
+                                        (r/as-element [triangle-cp props]))
+                    :on-error-button-press (fn [msg]
+                                             (dispatch [:resend-message msg]))}])))
 
 (defn conversation-right-button
   []
@@ -400,12 +397,12 @@
                         nil)]
       [view {:flex-direction "row"
              :padding-right 12}
-       [touchable-opacity
-        [material-icon-button (merge
-                               {:name "videocam"
-                                :on-press (fn []
-                                            (dispatch [:call-initial callee]))}
-                               (pl-style :video-call-icon))]]
+       ;; [touchable-opacity
+       ;;  [material-icon-button (merge
+       ;;                         {:name "videocam"
+       ;;                          :on-press (fn []
+       ;;                                      (dispatch [:call-initial callee]))}
+       ;;                         (pl-style :video-call-icon))]]
 
        [touchable-opacity {:on-press #(dispatch [:nav/root-push {:key :profile
                                                                  :title (:name callee)

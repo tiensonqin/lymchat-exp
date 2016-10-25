@@ -57,7 +57,7 @@
  :current-messages
  (fn [db _]
    (reaction
-    (util/distinct-by-id (get @db :current-messages)))))
+    (distinct (get @db :current-messages)))))
 
 (register-sub
  :local-stream
@@ -185,10 +185,10 @@
    (reaction
     (util/collify
      (some->> (get-in @db [:channel-messages channel-id])
-              (util/distinct-by-id)
               (mapv (partial storage/msg-convert (:id (:current-user db))))
               (sort-by :createdAt)
-              (reverse))))))
+              (reverse)
+              (distinct))))))
 
 (register-sub
  :channel-members

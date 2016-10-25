@@ -8,7 +8,7 @@
              :current-user nil
              :conversations []
              :invites []
-             :channel-messages []
+             :channel-messages {}
              :contacts []
              :latest-message-id nil
              :current-tab "Lymchat"

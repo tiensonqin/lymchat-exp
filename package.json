@@ -8,7 +8,7 @@
   "dependencies": {
     "@exponent/ex-navigation": "^1.7.0-rc-4",
     "@exponent/vector-icons": "^1.0.1",
-    "exponent": "github:tiensonqin/exponent-sdk#webrtc",
+    "exponent": "~10.0.3",
     "react": "~15.3.2",
     "react-native": "github:exponentjs/react-native#sdk-10.1.4",
     "react-native-app-intro": "^1.1.5",

@@ -16,13 +16,15 @@
     (fn []
       [view {:style {:flex 1
                      :flex-direction "column"
-                     :padding-left 30
+                     :padding-left 20
                      :padding-top 50}}
        [input {:style {:height 80
                        :borderWidth 0
-                       :font-size 30
-                       :font-weight "bold"
+                       :padding-left 10
+                       :font-size 26
+                       :font-weight "400"
                        :color "#FFFFFF"
+                       :fontFamily "pacifico"
                        :background-color "transparent"}
                :selectionColor "#FFF"
                :auto-correct false
@@ -73,6 +75,9 @@
                    :align-items "center"
                    :justify-content "center"}}
      [text {:style {:font-size 18
+                    :font-family "indie-flower"
+                    :font-weight "400"
+                    :color "rgba(0,0,0,0.7)"
                     :align-self "center"}}
       (str "#" name)]]]])
 
@@ -89,10 +94,11 @@
   [view {:style {:flex 1
                  :padding 30}}
    [text {:style {:font-size 20
-                  :font-weight "bold"
+                  :fontFamily "indie-flower"
+                  :font-weight "400"
                   :color "#FFFFFF"
                   :background-color "transparent"}}
-    "Culture is the door, Language is the key. Which group you want to join?"]
+    "Culture is the door, Language is the key."]
 
    [view {:style {:flex 1
                   :margin-top 20}}
