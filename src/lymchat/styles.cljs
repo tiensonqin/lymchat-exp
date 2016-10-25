@@ -76,10 +76,10 @@
                            :margin-right -8
                            :color "#rgba(0,0,0,0.8)"}}
 
-   :avatar-icon {:android {:margin-top 10
+   :avatar-icon {:android {:margin-top 13
                            :margin-right 8}
-                 :ios {:margin-top 10
-                       :margin-right 6}}
+                 :ios {:margin-top 8
+                       :margin-right 2}}
 
    :right-menu {:android {:padding-top 8
                           :padding-right 10

@@ -4,7 +4,8 @@
             [lymchat.styles :refer [styles pl-style]]
             [lymchat.shared.ui :refer [text view touchable-highlight button colors gradient material-icon icon-button input alert image switch open-url  scroll touchable-opacity modal dimensions activity-indicator] :as ui]
             [lymchat.photo :refer [offline-avatar-cp] :as photo]
-            [lymchat.util :as util]))
+            [lymchat.util :as util]
+            [lymchat.core-async-storage :as as]))
 
 (defn seperator-cp
   [num]
@@ -182,7 +183,7 @@
 
         (when (util/development?)
           [touchable-highlight
-           {:on-press #(lymchat.core-async-storage/clear)}
+           {:on-press as/clear}
            [text
             "Clear"]])]])))
 

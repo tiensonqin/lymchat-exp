@@ -21,6 +21,9 @@ var ActivityIndicator = {}
 ActivityIndicator.animating
 ActivityIndicator.color
 
+var DeviceEventEmitter = {}
+DeviceEventEmitter.addListener = function() {}
+
 var linking = {}
 linking.addEventListener = function() {}
 linking.removeEventListener = function() {}
@@ -53,11 +56,18 @@ Exponent.FileSystem = {}
 Exponent.Font = {}
 var Font = {}
 Font.loadAsync = function() {}
+Exponent.Permissions = {}
+var Permissions = {}
+Permissions.askAsync = function() {}
+Permissions.REMOTE_NOTIFICATIONS
+
 Exponent.ImagePicker = {}
 var ImagePicker = {}
 ImagePicker.launchCameraAsync = function() {}
 ImagePicker.launchImageLibraryAsync = function() {}
 Exponent.Notifications = {}
+var Notifications = {}
+Notifications.getExponentPushTokenAsync = function() {}
 
 var Components = {}
 Components.AppLoading = {}
