@@ -10,6 +10,5 @@
 
 (defonce xxxxx (atom nil))
 
-(def RCTConfig (clj->js
-                {:app_key "app-key"
-                 :app_secret "app-secret"}))
+(def credentials {:app-key "app-key"
+                  :app-secret "app-secret"})

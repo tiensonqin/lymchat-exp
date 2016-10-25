@@ -2,11 +2,10 @@
   (:require [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]
             [lymchat.styles :refer [styles]]
-            [lymchat.shared.ui :refer [text view image touchable-highlight colors status-bar gradient activity-indicator app-intro dimensions modal button] :as ui]
+            [lymchat.shared.ui :refer [text view image touchable-highlight colors status-bar gradient activity-indicator app-intro dimensions modal button scroll] :as ui]
             [lymchat.shared.scene.login :as login]
             [lymchat.util :as util]))
 
-;; TODO upload images to cloudfront
 (def image-s1 (js/require "./assets/images/intro/s1.png"))
 (def image-s2 (js/require "./assets/images/intro/s2.png"))
 (def image-s3 (js/require "./assets/images/intro/s3.png"))
@@ -87,7 +86,7 @@
                   :transparent false
                   :visible true
                   :onRequestClose (fn [])}
-           [view {:flex 1
+           [scroll {:flex 1
                   :padding-top 30
                   :background-color (:teal600 colors)
                   :align-items "center"}

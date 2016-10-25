@@ -6,9 +6,11 @@
             [lymchat.ws :as ws]
             [lymchat.util :as util]
             [lymchat.assets :as assets]
+            [lymchat.notification :as noti]
             [lymchat.navigation.router :as router]
             [lymchat.shared.scene.intro :as intro]
-            [lymchat.shared.scene.guide :as guide]))
+            [lymchat.shared.scene.guide :as guide]
+            [lymchat.exponent.notification :as notification]))
 
 (aset js/console "disableYellowBox" true)
 
@@ -59,7 +61,13 @@
         (r/create-class
          {:component-will-mount
           (fn [this]
-            (util/show-statusbar))
+            (util/show-statusbar)
+
+            (notification/register-for-push-notifications)
+
+            (.addListener ui/device-event-emitter
+                          "Exponent.notification"
+                          noti/handler))
 
           :component-did-mount
           (fn [this]

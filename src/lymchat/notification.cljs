@@ -28,13 +28,15 @@
 ;;  {:type new-call}
 
 (defn handler
-  [{:keys [foreground message data badge alert sound] :as message}]
-  (let [data (get-in data [:custom :a])]
+  [message]
+  (let [{:keys [data origin]} (util/keywordize message)
+        data (util/keywordize (js/JSON.parse data))
+        foreground? (= "received" origin)]
     (cond
       ;; new-message
       (and
        (= "new-message" (:type data))
-       (true? foreground))
+       (true? foreground?))
 
       (let [callee (:current-callee @app-db)
             from (get-in data [:message :user_id])]
@@ -51,7 +53,7 @@
 
       (and
        (= "new-message" (:type data))
-       (false? foreground))
+       (false? foreground?))
 
       ;; open corresponding conversation
       (when (:sync? @app-db)
@@ -60,7 +62,7 @@
       ;; new-channel-message
       (and
        (= "new-channel-message" (:type data))
-       (true? foreground))
+       (true? foreground?))
 
       (let [channel-id (:current-channel @app-db)
             msg-channel-id (get-in data [:message :channel_id])]
@@ -78,7 +80,7 @@
       ;; open corresponding channel
       (and
        (= "new-channel-message" (:type data))
-       (false? foreground))
+       (false? foreground?))
 
       (when (:sync? @app-db)
         (dispatch [:new-channel-message-pushed-notification (:message data)]))
@@ -88,13 +90,13 @@
       ;; jump to mentions
       (and
        (= "new-mention" (:type data))
-       (false? foreground))
+       (false? foreground?))
       (dispatch [:reset-tab "mentions"])
 
       ;; invite-accept
       (and
        (= "invite-accept" (:type data))
-       (false? foreground))
+       (false? foreground?))
 
       (when (:sync? @app-db)
         (dispatch [:jump-in-conversation (:user data)]))
@@ -102,7 +104,7 @@
       ;; invite-request
       (and
        (= "invite-request" (:type data))
-       (false? foreground))
+       (false? foreground?))
 
       (do
         (dispatch [:new-invite (:user data)])
@@ -111,7 +113,7 @@
 
       (and
        (= "invite-request" (:type data))
-       (true? foreground))
+       (true? foreground?))
       (dispatch [:new-invite (:user data)])
 
       :else nil)))

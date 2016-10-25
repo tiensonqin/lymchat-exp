@@ -51,6 +51,8 @@
 (def input (r/adapt-react-class (aget react-native "TextInput")))
 (def switch (r/adapt-react-class (aget react-native "Switch")))
 (def vibration (aget react-native "Vibration"))
+(def device-event-emitter (aget react-native "DeviceEventEmitter"))
+
 
 (defn vibrate
   []

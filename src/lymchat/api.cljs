@@ -121,9 +121,8 @@
 
 (defn auth
   [social-type user-info]
-  (api-post (str (api-host) "/v1/auth") nil (assoc (social->user social-type user-info)
-                                                   :app-key (.-app_key config/RCTConfig)
-                                                   :app-secret (.-app_secret config/RCTConfig))
+  (api-post (str (api-host) "/v1/auth") nil (merge (social->user social-type user-info)
+                                                   config/credentials)
             (fn [res]
               (let [res (js->clj res :keywordize-keys true)]
                 (if (:new res)

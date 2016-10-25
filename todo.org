@@ -36,10 +36,11 @@
 
 ** DONE google closure externs
    CLOSED: [2016-10-22 Sat 23:43]
-
+** TODO [#A] message input box
+** TODO [#A] notifications
+** TODO members
+** TODO @
 ** TODO use cljsjs.moment
-** TODO message input box
-** TODO notifications
 ** TODO google signin
 ** TODO wechat signin
 ** TODO votes for new groups
