@@ -11,6 +11,12 @@ StatusBar.setHidden = function () {}
 var Clipboard = {}
 Clipboard.setString = function () {}
 
+var Animated = {}
+Animated.View = {}
+Animated.Image = {}
+Animated.Text = {}
+Animated.ScrollView = {}
+
 ReactNative.RefreshControl = {}
 ReactNative.Vibration = {}
 var Vibration = {}

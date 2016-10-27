@@ -60,7 +60,7 @@
 
 (def device-event-emitter (aget react-native "DeviceEventEmitter"))
 
-(def Animated (.-Animated react-native))
+(def Animated (aget react-native "Animated"))
 (def animated-view (r/adapt-react-class Animated.View))
 (def animated-image (r/adapt-react-class Animated.Image))
 (def animated-text (r/adapt-react-class Animated.Text))
