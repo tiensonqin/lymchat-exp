@@ -160,3 +160,6 @@ var MaterialIconButton = {}
 var moment = {}
 moment.format = function() {}
 moment.fromNow = function() {}
+moment.subtract = function() {}
+moment.startOf = function() {}
+moment.isSame = function() {}
