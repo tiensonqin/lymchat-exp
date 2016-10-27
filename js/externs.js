@@ -8,6 +8,9 @@ ReactNative.StatusBar = {}
 var StatusBar = {}
 StatusBar.setHidden = function () {}
 
+var Clipboard = {}
+Clipboard.setString = function () {}
+
 ReactNative.RefreshControl = {}
 ReactNative.Vibration = {}
 var Vibration = {}
