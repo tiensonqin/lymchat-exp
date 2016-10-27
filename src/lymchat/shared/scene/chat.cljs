@@ -534,48 +534,44 @@
 
 (defn members-modal-cp
   [current-input]
-  ;; (let [members (subscribe [:search-members-result])]
-  ;;   (fn []
-  ;;     (let [component [modalbox {:isOpen true
-  ;;                                :style {:max-height 200}
-  ;;                                :swipeToClose false
-  ;;                                :backdropPressToClose false}
-  ;;                      [view {:style {:background-color "#FFF"
-  ;;                                     :width 1000}}
-  ;;                       (for [{:keys [id name username avatar] :as member} @members]
-  ;;                         ^{:key id}
-  ;;                         [touchable-opacity {:on-press (fn []
-  ;;                                                         (swap! current-input
-  ;;                                                                (fn [v]
-  ;;                                                                  (str (subs v 0 (str/last-index-of v \@)) "@" username ": ")))
-  ;;                                                         (dispatch [:set-search-members-result nil]))
-  ;;                                             :style {:flex-direction "column"}}
-  ;;                          [view {:style {:flex-direction "row"
-  ;;                                         :padding-left 10
-  ;;                                         :padding-right 10
-  ;;                                         :padding-bottom 10
-  ;;                                         :padding-top 10
-  ;;                                         :border-width 0.5
-  ;;                                         :border-color "#ccc"}}
-  ;;                           [photo/offline-avatar-cp id avatar
-  ;;                            {:width 24
-  ;;                             :height 24
-  ;;                             :resizeMode "cover"
-  ;;                             :border-radius 4}]
-  ;;                           [text {:style {:margin-left 10
-  ;;                                          :align-self "center"
-  ;;                                          :font-weight "500"
-  ;;                                          :color "rgba(0,0,0,0.8)"}}
-  ;;                            username]]])]]]
-  ;;       (cond
-  ;;         (ui/ios?)
-  ;;         [view {:style {:position "absolute"
-  ;;                        :top 64}}
-  ;;          component]
-
-  ;;         :else
-  ;;         component))))
-  )
+  (let [members (subscribe [:search-members-result])
+        {:keys [width height]} (js->clj (.get ui/dimensions "window") :keywordize-keys true)
+        visible-anim (atom (ui/animated-value 0))]
+    (ui/animated-timing @visible-anim 1)
+    (fn []
+      [ui/animated-view
+       {:style {:position "absolute"
+                :top (if (ui/ios?) 64 80)
+                :left 0
+                :width width
+                :height 140
+                :opacity @visible-anim
+                :backgroundColor "rgba(255,255,255,1)"}}
+       (for [{:keys [id name username avatar] :as member} @members]
+         ^{:key id}
+         [touchable-opacity {:on-press (fn []
+                                         (swap! current-input
+                                                (fn [v]
+                                                  (str (subs v 0 (str/last-index-of v \@)) "@" username ": ")))
+                                         (dispatch [:set-search-members-result nil]))
+                             :style {:flex-direction "column"}}
+          [view {:style {:flex-direction "row"
+                         :padding-left 10
+                         :padding-right 10
+                         :padding-bottom 10
+                         :padding-top 10
+                         :border-width 0.5
+                         :border-color "#ccc"}}
+           [photo/offline-avatar-cp id avatar
+            {:width 24
+             :height 24
+             :resizeMode "cover"
+             :border-radius 4}]
+           [text {:style {:margin-left 10
+                          :align-self "center"
+                          :font-weight "500"
+                          :color "rgba(0,0,0,0.8)"}}
+            username]]])])))
 
 (defonce channel-current-input (r/atom nil))
 

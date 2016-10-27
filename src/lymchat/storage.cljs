@@ -204,21 +204,24 @@
         (get-conversations)))
 
 (defn create-conversation
-  [to msg msg-created-at]
-  (when-not (conversation-exists? to)
-    (let [largest-id (get-largest-conversation-id)]
-      (when-let [contact (get-by-id :contacts to)]
-        (let [new-id (inc largest-id)
-              conversation {:id new-id
-                            :to to
-                            :user_id (:id contact)
-                            :name (:name contact)
-                            :avatar (:avatar contact)
-                            :last_message msg
-                            :last_message_at msg-created-at}]
-          (create :conversations conversation)
-          (dispatch [:new-conversation conversation])
-          new-id)))))
+  ([to msg msg-created-at]
+   (create-conversation to msg msg-created-at nil))
+  ([to msg msg-created-at contact]
+   (when-not (conversation-exists? to)
+     (let [largest-id (get-largest-conversation-id)
+           contact (if contact contact (get-by-id :contacts to))]
+       (when contact
+         (let [new-id (inc largest-id)
+               conversation {:id new-id
+                             :to to
+                             :user_id (:id contact)
+                             :name (:name contact)
+                             :avatar (:avatar contact)
+                             :last_message msg
+                             :last_message_at msg-created-at}]
+           (create :conversations conversation)
+           (dispatch [:new-conversation conversation])
+           new-id))))))
 
 (defn update-conversations
   [m]
@@ -259,10 +262,12 @@
 
 (defn wrap-conversation-id
   ([msg]
-   (wrap-conversation-id msg :user_id))
-  ([{:keys [body created_at] :as msg} k]
+   (wrap-conversation-id msg :user_id nil))
+  ([msg k]
+   (wrap-conversation-id msg k nil))
+  ([{:keys [body created_at] :as msg} k contact]
    (let [cid (get-conversation-id-by-to (get msg k))
-         cid (if cid cid (create-conversation (get msg k) body created_at))]
+         cid (if cid cid (create-conversation (get msg k) body created_at contact))]
      (assoc msg :conversation_id cid))))
 
 (defn get-conversation-messages

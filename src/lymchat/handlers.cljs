@@ -954,7 +954,7 @@
      (storage/create-channel-conversation channel-id nil)
      (dispatch [:nav/root-push {:key :channel-conversation
                                 :title (str "#" (util/underscore-channel-name (:name channel)))
-                           :channel channel}])
+                                :channel channel}])
      (-> db
          (assoc :current-channel channel-id)
          (update-in [:channel-messages channel-id]
@@ -1035,48 +1035,53 @@
 (register-handler
  :conj-message
  (fn [db [_ message k]]
-   (if (= :invite-accept (get-in message [:data :type]))
-     ;; create contact
-     (when-let [user (get-in message [:data :user])]
-       (dispatch [:add-contact user])))
+   (let [new-user (atom nil)]
+     (if (= :invite-accept (get-in message [:data :type]))
+       ;; create contact
+       (when-let [user (get-in message [:data :user])]
+         (reset! new-user user)
+         (dispatch [:add-contact user])))
 
-   (let [message (assoc message :is_delivered true)
-         message (if (:conversation_id message)
-                   message
-                   (storage/wrap-conversation-id message k))
-         me-id (get-in db [:current-user :id])
-         conversation-is-read (if (or
-                                   (= (:current-callee db)
-                                      (:user_id message))
-                                   (= k :to_id))
-                                true
-                                false)
-         last-message (:body message)]
+     (let [message (assoc message :is_delivered true)
+           message (if (:conversation_id message)
+                     message
+                     (if @new-user
+                       (storage/wrap-conversation-id message k @new-user)
+                       (storage/wrap-conversation-id message k)))
+           me-id (get-in db [:current-user :id])
+           conversation-is-read (if (or
+                                     (= (:current-callee db)
+                                        (:user_id message))
+                                     (= k :to_id))
+                                  true
+                                  false)
+           last-message (:body message)]
 
-     (storage/create :messages message)
+       (storage/create :messages message)
 
-     (storage/update-conversations {:id (:conversation_id message)
-                                    :last_message last-message
-                                    :last_message_at (:created_at message)
-                                    :is_read conversation-is-read})
+       (storage/update-conversations {:id (:conversation_id message)
+                                      :last_message last-message
+                                      :last_message_at (:created_at message)
+                                      :is_read conversation-is-read})
 
-     (-> (if (or (= (:current-callee db) (:user_id message))
-                 (= (:current-callee db) (:to_id message)))
-           (update db :current-messages (fn [messages]
-                                          (if (seq (filter #(= (:id message) (:_id %)) messages))
-                                            messages
-                                            (conj messages (storage/msg-convert me-id message)))))
-           db)
-         (update :conversations (fn [col]
-                                  (doall
-                                   (map (fn [c]
-                                          (if (= (:conversation_id message) (:id c))
-                                            (assoc c
-                                                   :last_message last-message
-                                                   :last_message_at (:created_at message)
-                                                   :is_read conversation-is-read)
-                                            c))
-                                     col))))))))
+       (-> (if (or (= (:current-callee db) (:user_id message))
+                   (= (:current-callee db) (:to_id message)))
+             (update db :current-messages (fn [messages]
+                                            (if (seq (filter #(= (:id message) (:_id %)) messages))
+                                              messages
+                                              (conj messages (storage/msg-convert me-id message)))))
+             db)
+           (update :messages conj message)
+           (update :conversations (fn [col]
+                                    (doall
+                                     (map (fn [c]
+                                            (if (= (:conversation_id message) (:id c))
+                                              (assoc c
+                                                     :last_message last-message
+                                                     :last_message_at (:created_at message)
+                                                     :is_read conversation-is-read)
+                                              c))
+                                       col)))))))))
 
 (register-handler
  :conj-mention

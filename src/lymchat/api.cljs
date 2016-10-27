@@ -185,7 +185,9 @@
                                               :user_id (:id (storage/me))
                                               :to_id (:id user)
                                               :body "Hi, I accept your invitation."
-                                              :created_at (tc/to-date (t/now))}
+                                              :created_at (tc/to-date (t/now))
+                                              :data {:type :invite-accept
+                                                     :user user}}
                                :to_id])
 
                     (if (> invites-count 1)

@@ -36,12 +36,16 @@
 
 ** DONE google closure externs
    CLOSED: [2016-10-22 Sat 23:43]
-** TODO [#A] message input box
 ** DONE [#A] notifications
    CLOSED: [2016-10-25 Tue 23:17]
-** TODO [#A] invites, async hell
-** TODO members
-** TODO @
+** DONE [#A] invites, async hell
+   CLOSED: [2016-10-27 Thu 21:01]
+** TODO [#A] message input box
+** DONE [#A] @ members
+   CLOSED: [2016-10-27 Thu 21:47]
+
+** TODO [#B] members count
+** TODO [#B] recommend channels
 ** TODO use cljsjs.moment
 ** TODO google signin
 ** TODO wechat signin

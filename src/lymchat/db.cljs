@@ -26,6 +26,7 @@
 
              ;; chat
              :current-messages []
+             :messages []
              :new-message? false
 
              :current-channel nil

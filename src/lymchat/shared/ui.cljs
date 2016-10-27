@@ -51,13 +51,60 @@
 (def input (r/adapt-react-class (aget react-native "TextInput")))
 (def switch (r/adapt-react-class (aget react-native "Switch")))
 (def vibration (aget react-native "Vibration"))
-(def device-event-emitter (aget react-native "DeviceEventEmitter"))
 
 ;; TODO android vibrate permission
 (defn vibrate
   []
   (when (ios?)
     (.vibrate vibration)))
+
+(def device-event-emitter (aget react-native "DeviceEventEmitter"))
+
+(def Animated (.-Animated react-native))
+(def animated-view (r/adapt-react-class Animated.View))
+(def animated-image (r/adapt-react-class Animated.Image))
+(def animated-text (r/adapt-react-class Animated.Text))
+(def animated-scroll-view (r/adapt-react-class Animated.ScrollView))
+(defn animated-timing
+  [state to-value]
+  (->
+   (.timing Animated
+            state
+            #js {:toValue to-value})
+   (.start)))
+
+(defn animated-spring
+  [state opts]
+  (->
+   (.spring Animated
+            state
+            (clj->js opts))
+   (.start)))
+
+(defn animated-value
+  [x]
+  (Animated.Value. x))
+
+(defn animated-event
+  [scroll-y]
+  (.event Animated
+          (clj->js
+           [{:nativeEvent {:contentOffset {:y scroll-y}}}])
+          (clj->js
+           {:useNativeDriver true})))
+
+(defn animated-interpolate
+  ([ani input-range output-range]
+   (animated-interpolate ani input-range output-range nil))
+  ([ani input-range output-range extrapolate]
+   (.interpolate ani
+                 (clj->js
+                  (cond->
+                    {:inputRange input-range
+                     :outputRange output-range}
+                    (some? extrapolate)
+                    (assoc :extrapolate extrapolate))))))
+
 
 (defn button
   [{:keys [style text-style on-press]
