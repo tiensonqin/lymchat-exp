@@ -16,7 +16,8 @@
     "hideExponentText": true
   },
   "packagerOpts": {
-    "assetExts": ["ttf","otf"]
+    "assetExts": ["ttf","otf"],
+    "nonPersistent": ""
   },
   "ios": {
     "bundleIdentifier": "com.lymchat.lymchat",

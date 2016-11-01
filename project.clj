@@ -25,19 +25,6 @@
             "prod-build" ^{:doc "Recompile code with prod profile."}
             ["do" "clean"
              ["with-profile" "prod" "cljsbuild" "once" "main"]]}
-  :js-modules ["react-native"
-               "react"
-               "exponent"
-               "moment"
-               "@exponent/ex-navigation"
-               "@exponent/vector-icons/MaterialIcons"
-               "@exponent/vector-icons/FontAwesome"
-               "@exponent/react-native-action-sheet"
-               "SwipeableListView"
-               "react-native-parsed-text"
-               "react-native-gifted-chat"
-               "react-native-app-intro"
-               "react-native-aws3"]
   :profiles {:dev {:dependencies [[figwheel-sidecar "0.5.4-7"]
                                   [com.cemerick/piggieback "0.2.1"]]
                    :source-paths ["src" "env/dev"]
@@ -47,7 +34,8 @@
                                             :compiler     {:output-to     "target/not-used.js"
                                                            :main          "env.main"
                                                            :output-dir    "target"
-                                                           :optimizations :none}}]}
+                                                           :optimizations :none
+                                                           :source-map    true}}]}
                    :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}}
              :prod {:cljsbuild {:builds [{:id "main"
                                           :source-paths ["src" "env/prod"]

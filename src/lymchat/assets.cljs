@@ -34,4 +34,4 @@
    (.then (fn [resp]
             (if cb (cb))))
    (.catch (fn [err]
-             (prn {:load-assets-error (aget err "message")})))))
+             (println "Loading assets failed: " (aget err "message"))))))
