@@ -1,165 +1,72 @@
-DataSource.cloneWithRowsAndSections = function() {}
-ReactNative.Keyboard = {}
-ReactNative.Linking = {}
-var Keyboard = {}
-Keyboard.addListener = function () {}
-
-ReactNative.StatusBar = {}
-var StatusBar = {}
-StatusBar.setHidden = function () {}
-
-var Clipboard = {}
-Clipboard.setString = function () {}
-
-var Animated = {}
-Animated.View = {}
-Animated.Image = {}
-Animated.Text = {}
-Animated.ScrollView = {}
-
-ReactNative.RefreshControl = {}
-ReactNative.Vibration = {}
-var Vibration = {}
-Vibration.vibrate = function () {}
-
-var SwipeableListView = {}
-SwipeableListView.getNewDataSource = function () {}
-
-ReactNative.ActivityIndicator = {}
-var ActivityIndicator = {}
-ActivityIndicator.animating
-ActivityIndicator.color
-
-var DeviceEventEmitter = {}
-DeviceEventEmitter.addListener = function() {}
-
-var linking = {}
-linking.addEventListener = function() {}
-linking.removeEventListener = function() {}
-linking.openURL = function() {}
-linking.canOpenURL = function() {}
-linking.popInitialURL = function() {}
-
-var aws3 = {}
-aws3.rns3 = {}
-
-var rns3 = {}
-rns3.put = function() {}
-
-var AppIntro = {}
-
-var ParsedText = {}
-
-var GiftedChat = {}
-
-var Exponent = {}
-Exponent.Amplitude = {}
-Exponent.Asset = {}
-var Asset = {}
-Asset.fromModule = function() {}
-Exponent.Components = {}
-Exponent.Facebook = {}
-var Facebook = {}
-Facebook.logInWithReadPermissionsAsync = function() {}
-Exponent.FileSystem = {}
-Exponent.Font = {}
-var Font = {}
-Font.loadAsync = function() {}
-Exponent.Permissions = {}
-var Permissions = {}
-Permissions.askAsync = function() {}
-Permissions.REMOTE_NOTIFICATIONS
-
-Exponent.ImagePicker = {}
-var ImagePicker = {}
-ImagePicker.launchCameraAsync = function() {}
-ImagePicker.launchImageLibraryAsync = function() {}
-Exponent.Notifications = {}
-var Notifications = {}
-Notifications.getExponentPushTokenAsync = function() {}
-
-var Components = {}
-Components.AppLoading = {}
-Components.BlurView = {}
-Components.LinearGradient = {}
-
-// Webrtc
-Components.RTCPeerConnection = {}
-Components.RTCIceCandidate = {}
-Components.RTCSessionDescription = {}
-Components.RTCView = {}
-Components.MediaStream = {}
-Components.MediaStreamTrack = {}
-var MediaStreamTrack = {}
-MediaStreamTrack.getSources = function() {}
-Components.getUserMedia = function() {}
-
-var RTCPeerConnection = {}
-RTCPeerConnection.addStream = function() {}
-RTCPeerConnection.removeStream = function() {}
-RTCPeerConnection.createOffer = function() {}
-RTCPeerConnection.createAnswer = function() {}
-RTCPeerConnection.setConfiguration = function() {}
-RTCPeerConnection.setLocalDescription = function() {}
-RTCPeerConnection.setRemoteDescription = function() {}
-RTCPeerConnection.addIceCandidate = function() {}
-RTCPeerConnection.getStats = function() {}
-RTCPeerConnection.getRemoteStreams = function() {}
-RTCPeerConnection.close = function() {}
-RTCPeerConnection.createDataChannel = function() {}
-
-// ex-navigation
-var ExNavigation = {}
-ExNavigation.createRouter = function() {}
-ExNavigation.NavigationProvider = {}
-ExNavigation.StackNavigation = {}
-ExNavigation.StackNavigation.ExNavigationStackContext = {}
-ExNavigation.TabNavigation = {}
-ExNavigation.TabNavigationItem = {}
-ExNavigation.NavigationContext = {}
-
-var ExNavigationStackContext = {}
-ExNavigationStackContext.push = function() {}
-ExNavigationStackContext.router = function() {}
-ExNavigationStackContext.pop = function() {}
-ExNavigationStackContext.popToTop = function() {}
-ExNavigationStackContext.replace = function() {}
-ExNavigationStackContext.getCurrentRoute = function() {}
-ExNavigationStackContext.getCurrentIndex = function() {}
-ExNavigationStackContext.addRouteListener = function() {}
-ExNavigationStackContext.immediatelyResetStack = function() {}
-ExNavigationStackContext.showLocalAlert = function() {}
-ExNavigationStackContext.hideLocalAlert = function() {}
-ExNavigationStackContext.updateCurrentRouteParams = function() {}
-
-var NavigationContext = {}
-NavigationContext.getNavigator = function() {}
-NavigationContext.getNavigatorByUID = function() {}
-NavigationContext.getCurrentNavigatorUID = function() {}
-NavigationContext.getFocusedRoute = function() {}
-NavigationContext.registerNavigatorContext = function() {}
-NavigationContext.unregisterNavigatorContext = function() {}
-NavigationContext.store = function() {}
-NavigationContext.navigationStateKey = function() {}
-NavigationContext.dispatch = function() {}
-NavigationContext.navigationState = function() {}
-NavigationContext.performAction = function() {}
-NavigationContext.router = function() {}
-
-
-// action-sheet
-var ActionSheet = {}
-
-// vector-icons
-var FontAwesome = {}
-var FontAwesomeButton = {}
-var MaterialIcons = {}
-var MaterialIconButton = {}
-
-// moment
-var moment = {}
-moment.format = function() {}
-moment.fromNow = function() {}
-moment.subtract = function() {}
-moment.startOf = function() {}
-moment.isSame = function() {}
+var goog.string={};
+goog.string.format={};
+var lymchat.shared.ui={};
+lymchat.shared.ui.Permissions.REMOTE_NOTIFICATIONS={};
+var goog.string={};
+goog.string.format={};
+var lymchat.shared.ui={};
+lymchat.shared.ui.Facebook.logInWithReadPermissionsAsync={};
+var Components={};
+Components.LinearGradient={};
+var Animated={};
+Animated.Image={};
+var Animated={};
+Animated.Value={};
+var Animated={};
+Animated.ScrollView={};
+var Components={};
+Components.AppLoading={};
+var Animated={};
+Animated.View={};
+var Components={};
+Components.BlurView={};
+var Animated={};
+Animated.Text={};
+var goog={};
+goog.string.StringBuffer={};
+var taoensso.timbre={};
+taoensso.timbre.error={};
+var DummyClass={};
+DummyClass.#{}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{fqn json push ok catch then error}=function(){};
+DummyClass.#{loadAsync downloadAsync fromModule all catch then}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{registerComponent}=function(){};
+DummyClass.#{multiGet push getAllKeys then}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{getExponentPushTokenAsync askAsync}=function(){};
+DummyClass.#{push pop showLocalAlert showActionSheetWithOptions}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{uri fqn put launchImageLibraryAsync push cancelled launchCameraAsync then error}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{json catch then}=function(){};
+DummyClass.#{format get push fromNow cloneWithRowsAndSections getNewDataSource setString}=function(){};
+DummyClass.#{DataSource height ListView ge
+t cloneWithRows}=function(){};
+DummyClass.#{DataSource height ListView get push addListener cloneWithRows}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{get}=function(){};
+DummyClass.#{get}=function(){};
+DummyClass.#{DataSource ListView cloneWithRows}=function(){};
+DummyClass.#{get}=function(){};
+DummyClass.#{get}=function(){};
+DummyClass.#{DataSource ListView cloneWithRows}=function(){};
+DummyClass.#{DataSource ListView format cloneWithRowsAndSections}=function(){};
+DummyClass.#{get push}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{addListener}=function(){};
+DummyClass.#{vibrate runAfterInteractions prefetch push cloneWithRowsAndSections start alert interpolate OS spring prompt event openURL timing}=function(){};
+DummyClass.#{push slice}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{routeName format getCurrentRoute}=function(){};
+DummyClass.#{subtract fetch setHidden getNavigator push isConnected startOf isSame append toString keys addEventListener catch then}
+=function(){};
+DummyClass.#{push slice}=function(){};
+DummyClass.#{}=function(){};
+DummyClass.#{push}=function(){};
+DummyClass.#{}=function(){};

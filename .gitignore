@@ -1,6 +1,7 @@
 node_modules/
 .exponent/**/*
 /target
+/out
 /classes
 /checkouts
 pom.xml
