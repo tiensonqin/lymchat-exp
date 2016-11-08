@@ -16,10 +16,12 @@
                  [prismatic/schema "1.0.4"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]]
   :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.4-7"]]
+            [lein-figwheel "0.5.4-7"]
+            [lein-generate-externs "0.1.0-SNAPSHOT"]]
   :clean-targets ["target/" "main.js"]
   :aliases {"figwheel" ["run" "-m" "user" "--figwheel"]
-            "re-generate" ["run" "-m" "user" "--re-generate"]
+            "externs" ["do" "clean"
+                       ["run" "-m" "externs"]]
             "prod-build" ^{:doc "Recompile code with prod profile."}
             ["do" "clean"
              ["with-profile" "prod" "cljsbuild" "once" "main"]]}

@@ -1,4 +1,4 @@
-(ns lymchat.externs
+(ns externs
   (:require [cljs.compiler.api :as compiler]
             [cljs.analyzer.api :as analyzer]
             [cljs.analyzer :as ana]
@@ -6,21 +6,30 @@
             [clojure.pprint :refer [pprint]]
             [clojure.java.io :as io]
             [clojure.string :as str]
-            [cljs.closure :as closure]
             [cljs.env :as env]
             [clojure.tools.reader :as r]
             [clojure.tools.reader.reader-types :refer [string-push-back-reader]]
             [cljs.tagged-literals :as tags])
   (:import (clojure.lang LineNumberingPushbackReader)))
 
+;; Idea from https://gist.github.com/Chouser/5796967
+
+;; TODO (NAMESPACE/MODULE.method ...args) or NAMESPACE/MODULE.field not work
+;; For example, (ui/Facebook.logInWithReadPermissionsAsync ...args)
+;; or ui/Permissions.REMOTE_NOTIFICATIONS,
+;; we already know logInWithReadPermissionsAsync is `invoke' op
+;; and REMOTE_NOTIFICATIONS is a property, need to dig deeper to the ast
+
+;; TODO ana/analyze is slow
+
 (defonce cenv (analyzer/empty-state))
-(comment
+
+(defn compile-project
+  [src target]
   (analyzer/with-state cenv
-   (let [src (io/file "src/lymchat/core.cljs")]
-     (closure/compile src
-                      {:output-file (closure/src-file->target-file src)
-                       :force       true
-                       :mode        :interactive}))))
+    (compiler/with-core-cljs
+      (compiler/compile-root src target))))
+
 (defn get-namespaces
   []
   (:cljs.analyzer/namespaces @cenv))
@@ -57,7 +66,7 @@
             ana/*cljs-file* filename]
     (mapv
      (fn [form]
-       (try (ana/no-warn (ana/analyze (ana/empty-env) form nil))
+       (try (ana/no-warn (ana/analyze (ana/empty-env) form {:cache-analysis true}))
             (catch Exception e
               (prn filename e))))
      (read-file filename))))
@@ -65,19 +74,17 @@
 (defn flatten-ast [ast]
   (mapcat #(tree-seq :children :children %) ast))
 
-;; (def flat-ast (flatten-ast (file-ast "src/lymchat/shared/ui.cljs")))
-;; (count flat-ast)
 (defn get-interop-used
   "Return a set of symbols representing the method and field names
   used in interop forms in the given sequence of AST nodes."
   [flat-ast]
-  (set (keep #(let [ret (and (map? %)
-                             (when-let [sym (some % [:method :field])]
-                               (when-not (str/starts-with? sym "cljs")
-                                 sym)))]
-                (if ret
-                  ret
-                  nil)) flat-ast)))
+  (keep #(let [ret (and (map? %)
+                        (when-let [sym (some % [:method :field])]
+                          (when-not (str/starts-with? sym "cljs")
+                            sym)))]
+           (if ret
+             ret
+             nil)) flat-ast))
 
 (defn externs-for-interop [syms]
   (apply str
@@ -90,7 +97,9 @@
   ClojureScript compiler to have been defined, based on its mutable set
   of namespaces."
   [sym]
-  (contains? (:defs (get (get-namespaces) (symbol (namespace sym))))
+  (contains? (let [ns (get (get-namespaces) (symbol (namespace sym)))]
+               (merge (:defs ns)
+                      (:macros ns)))
              (symbol (name sym))))
 
 (defn get-vars-used
@@ -109,14 +118,15 @@
                  (symbol (str sym-namespace) sym-name)
                  sym)))))
 
-(defn extern-for-var [sym]
-  (if (= "js" (namespace sym))
-    (format "var %s={};\n" (name sym))
-    (format "var %s={};\n%s.%s={};\n"
-            (namespace sym) (namespace sym) (name sym))))
+(defn extern-for-var [[str-namespace symbols]]
+  (let [symbols-str (->> symbols
+                         (map (fn [sym] (format "%s.%s={};\n" (namespace sym) (name sym))))
+                         (apply str))]
+    (format "var %s={};\n%s"
+            str-namespace symbols-str)))
 
-(defn externs-for-vars [syms]
-  (apply str (map extern-for-var syms)))
+(defn externs-for-vars [grouped-syms]
+  (apply str (map extern-for-var grouped-syms)))
 
 (defn get-undefined-vars [requires flat-ast]
   (->> (get-vars-used requires flat-ast)
@@ -130,6 +140,7 @@
     [(get-undefined-vars ns-requires flat-ast)
      (get-interop-used flat-ast)]))
 
+;; copy from https://github.com/ejlo/lein-externs/blob/master/src/leiningen/externs.clj
 (defn cljs-file?
   "Returns true if the java.io.File represents a normal Clojurescript source
   file."
@@ -137,23 +148,45 @@
   (and (.isFile file)
        (.endsWith (.getName file) ".cljs")))
 
-(defn project-externs
+(defn get-source-paths [build-type builds]
+  (or
+   (when build-type
+     (:source-paths
+      (or ((keyword build-type) builds)
+          (first (filter #(= (name (:id %)) build-type) builds)))))
+   ["src" "cljs"]))
+
+(defn -main
   "Generate an externs file"
-  [project & [build-type outfile]]
+  []
+  ;; TODO configurable
+  (println "Start to generate externs...")
+  (compile-project (io/file "src") (io/file "target"))
+
+  (prn (keys (get-namespaces)))
+
   (let [source-paths ["src" "env/prod"]
+
         files        (->> source-paths
-                          (map #(str "/Users/tienson/codes/exponent/lymchat" "/" %))
                           (map io/file)
                           (mapcat file-seq)
                           (filter cljs-file?))
-
-        col          (apply concat (doall (map get-undefined-vars-and-interop-used files)))
-        vars (-> (flatten (take-nth 2 col))
-                 (externs-for-vars))
-        interop (-> (flatten (take-nth 2 (rest col)))
-                    (externs-for-interop))]
-    (str vars interop)))
-
-(comment
-  (def path "src/lymchat/shared/ui.cljs")
-  (project-externs nil))
+        col          (apply concat (doall (pmap get-undefined-vars-and-interop-used files)))
+        vars (->> (take-nth 2 col)
+                  (remove empty?)
+                  (flatten)
+                  (set)
+                  (sort)
+                  (group-by namespace)
+                  ;; remove goog dependencies, need to dig deeper(TODO)
+                  (remove (fn [[ns _]] (str/starts-with? ns "goog")))
+                  (externs-for-vars))
+        interop (->> (take-nth 2 (rest col))
+                     (remove empty?)
+                     (flatten)
+                     (set)
+                     (sort)
+                     (externs-for-interop))
+        result (str vars interop)]
+    (spit "js/externs.js" result)
+    (println "Generated externs to js/externs.js")))

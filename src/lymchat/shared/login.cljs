@@ -30,7 +30,7 @@
   (go
     (let [id "207571656306926"
           {:keys [type token] :as result}
-          (-> (ui/Facebook.logInWithReadPermissionsAsync id (clj->js {:permissions (clj->js ["public_profile"])
+          (-> (.logInWithReadPermissionsAsync ui/Facebook id (clj->js {:permissions (clj->js ["public_profile"])
                                                                                :web true}))
               (promise->chan)
               (<!)

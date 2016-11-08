@@ -10,7 +10,7 @@
   ;; Android remote notification permissions are granted during the app
   ;; install, so this will only ask on iOS
   (go
-    (let [status (-> (.askAsync ui/Permissions ui/Permissions.REMOTE_NOTIFICATIONS)
+    (let [status (-> (.askAsync ui/Permissions (aget ui/Permissions "REMOTE_NOTIFICATIONS"))
                      (promise->chan)
                      (async/<!)
                      (aget "status"))]
